@@ -1,0 +1,114 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Project Name": {
+      "type": "string",
+      "minLength": 5,
+      "metadata": {
+        "description": "Name for the project. This will be used to name other resources."
+      }
+    },
+    "Location": {
+      "type": "string",
+      "defaultValue": "West Europe",
+      "allowedValues": [ "East China", "East US2", "West Europe", "West Japan", "West US", "Southeast Asia" ],
+      "metadata": {
+        "description": "The location to rollout the project. This location must support premium storage."
+      }
+    },
+    "Windows Domain name": {
+      "type": "string",
+      "minLength": 5,
+      "metadata": {
+        "description": "Name for the Windows domain."
+      }
+    },
+    "domainAdmin": {
+      "type": "string",
+      "defaultValue": "adminSVDW",
+      "metadata": {
+        "description": "Name for the domain administrator."
+      }
+    },
+    "domainAdminPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "metadata": {
+        "description": "Password for the domain administrator"
+      }
+    }
+  },
+  "variables": {
+    "StandardStorageAccountName": "[tolower(concat('standard',parameters('Project Name')))]",
+    "PremiumStorageAccountName": "[tolower(concat('prem' ,parameters('Project Name')))]",
+    "VNetPrefix": "172.16.0.0/16",
+    "VNetSubnet1Name": "DCs",
+    "VNetSubnet1Prefix": "172.16.0.0/24",
+    "VNetSubnet2Name": "Servers",
+    "VNetSubnet2Prefix": "172.16.1.0/24"
+
+  },
+  "resources": [
+    {
+      "name": "[variables('StandardStorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "StandardStorageAccount"
+      },
+      "properties": {
+        "accountType": "Standard_LRS"
+      }
+    },
+    {
+      "name": "[variables('PremiumStorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "PremiumStorageAccount"
+      },
+      "properties": {
+        "accountType": "Premium_LRS"
+      }
+    },
+    {
+      "name": "VNet",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[parameters('location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "VNet"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('VNetPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('VNetSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('VNetSubnet1Prefix')]"
+            }
+          },
+          {
+            "name": "[variables('VNetSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[variables('VNetSubnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+
+  }
+}
