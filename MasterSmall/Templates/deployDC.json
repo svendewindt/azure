@@ -1,0 +1,149 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Location": { "type": "string" },
+    "StorageAccountName": { "type": "string" },
+    "StorageAccountType": { "type": "string" },
+    "StorageAccountDisplayName": { "type": "string" },
+    "VNetName": { "type": "string" },
+    "VNetPrefix": { "type": "string" },
+    "VNetSubnet1Name": { "type": "string" },
+    "VNetSubnet1Prefix": { "type": "string" },
+    "VNetSubnet2Name": { "type": "string" },
+    "VNetSubnet2Prefix": { "type": "string" },
+    "DCName": {"type": "string","minLength": 1},
+    "DCAdminUserName": {"type": "string","minLength": 1},
+    "DCAdminPassword": {"type": "securestring"},
+    "DCWindowsOSVersion": {"type": "string"}
+  },
+  "variables": {
+    "DCImagePublisher": "MicrosoftWindowsServer",
+    "DCImageOffer": "WindowsServer",
+    "DCOSDiskName": "DCOSDisk",
+    "DCVmSize": "Standard_D1",
+    "DCVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'VNet')]",
+    "DCSubnetRef": "[concat(variables('DCVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
+    "DCStorageAccountContainerName": "vhds",
+    "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]"
+  },
+  "resources": [
+    {
+      "name": "[parameters('StorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "[parameters('StorageAccountDisplayName')]"
+      },
+      "properties": {
+        "accountType": "[parameters('StorageAccountType')]"
+      }
+    },
+    {
+      "name": "VNet",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "[parameters('VNetName')]"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('VNetPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('VNetSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('VNetSubnet1Prefix')]"
+            }
+          },
+          {
+            "name": "[parameters('VNetSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('VNetSubnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[variables('DCNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', 'VNet')]"
+      ],
+      "tags": {
+        "displayName": "DCNic"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('DCSubnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('DCName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('StorageAccountName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('DCNicName'))]"
+      ],
+      "tags": {
+        "displayName": "DC"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('DCVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('DCName')]",
+          "adminUsername": "[parameters('DCAdminUsername')]",
+          "adminPassword": "[parameters('DCAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('DCImagePublisher')]",
+            "offer": "[variables('DCImageOffer')]",
+            "sku": "[parameters('DCWindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "DCOSDisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('DCStorageAccountContainerName'), '/', variables('DCOSDiskName'), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('DCNicName'))]"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {
+  }
+}
