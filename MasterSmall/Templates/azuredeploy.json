@@ -37,16 +37,57 @@
       "metadata": {
         "description": "Password for the domain administrator"
       }
+    },
+
+    "DCWindowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2008-R2-SP1",
+        "2012-Datacenter",
+        "2012-R2-Datacenter",
+        "Windows-Server-Technical-Preview"
+      ],
+      "metadata": {
+        "description": "Windows version for the domain controller."
+      }
+    },
+
+    "_artifactsLocation": {
+      "type": "string"
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring"
+    },
+    "DCTemplateFolder": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "template location. This path is relative to the _artifactsLocation parameter"
+      }
+    },
+    "DCTemplateFileName": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Name of the nested template file"
+      }
     }
   },
   "variables": {
     "StandardStorageAccountName": "[tolower(concat('standard',parameters('Project Name')))]",
+    "StandardStorageAccountType": "Standard_LRS",
+    "StandardStorageAccountDisplayName": "StandardStorageAccount",
     "PremiumStorageAccountName": "[tolower(concat('prem' ,parameters('Project Name')))]",
+    "PremiumStorageAccountType": "Premium_LRS",
+    "PremiumStorageAccountDisplayName": "PremiumStorageAccount",
+    "VNetName": "VNet",
     "VNetPrefix": "172.16.0.0/16",
     "VNetSubnet1Name": "DCs",
     "VNetSubnet1Prefix": "172.16.0.0/24",
     "VNetSubnet2Name": "Servers",
-    "VNetSubnet2Prefix": "172.16.1.0/24"
+    "VNetSubnet2Prefix": "172.16.1.0/24",
+    "DC01Name": "[concat(parameters('Project Name'),'DC01')]"
 
   },
   "resources": [
@@ -57,10 +98,10 @@
       "apiVersion": "2015-06-15",
       "dependsOn": [ ],
       "tags": {
-        "displayName": "StandardStorageAccount"
+        "displayName": "[variables('StandardStorageAccountDisplayName')]"
       },
       "properties": {
-        "accountType": "Standard_LRS"
+        "accountType": "[variables('StandardStorageAccountType')]"
       }
     },
     {
@@ -70,20 +111,20 @@
       "apiVersion": "2015-06-15",
       "dependsOn": [ ],
       "tags": {
-        "displayName": "PremiumStorageAccount"
+        "displayName": "[variables('PremiumStorageAccountDisplayName')]"
       },
       "properties": {
-        "accountType": "Premium_LRS"
+        "accountType": "[variables('PremiumStorageAccountType')]"
       }
     },
     {
-      "name": "VNet",
+      "name": "[variables('VNetname')]",
       "type": "Microsoft.Network/virtualNetworks",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [ ],
       "tags": {
-        "displayName": "VNet"
+        "displayName": "[variables('VNetname')]"
       },
       "properties": {
         "addressSpace": {
@@ -105,6 +146,35 @@
             }
           }
         ]
+      }
+    },
+    {
+      "name": "DC",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [ ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/', parameters('DCTemplateFolder'), '/', parameters('DCTemplateFileName'), parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "Location": { "value": "[parameters('Location')]" },
+          "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
+          "StorageAccountType": { "value": "[variables('StandardStorageAccountType')]" },
+          "StorageAccountDisplayName": { "value": "[variables('PremiumStorageAccountDisplayName')]" },
+          "Vnetname": { "value": "[variables('VNetname')]" },
+          "VNetPrefix": { "value": "[variables('VNetPrefix')]" },
+          "VNetSubnet1Name": { "value": "[variables('VNetSubnet1Name')]" },
+          "VNetSubnet1Prefix": { "value": "[variables('VNetSubnet1Prefix')]" },
+          "VNetSubnet2Name": { "value": "[variables('VNetSubnet2Name')]" },
+          "VNetSubnet2Prefix": { "value": "[variables('VNetSubnet2Prefix')]" },
+          "DCName": { "value": "[variables('DC01Name')]" },
+          "DCAdminUserName": { "value": "[parameters('domainAdmin') ]" },
+          "DCAdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
+          "DCWindowsOSVersion": {"value": "[parameters('DCWindowsOSVersion')]"}
+        }
       }
     }
   ],
