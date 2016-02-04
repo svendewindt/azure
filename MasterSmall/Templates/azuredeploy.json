@@ -194,12 +194,16 @@
           "DCAdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "DCAdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
-          "DCSize": {"value": "parameters('DCSize"}
+          "DCSize": {"value": "[parameters('DCSize')]"}
         }
       }
     }
   ],
   "outputs": {
+    "DCSize": {
+      "type": "string",
+      "value": "[parameters('DCSize')]"
+    }
 
   }
 }
