@@ -152,7 +152,11 @@
       "name": "DC",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "dependsOn": [ ],
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/',variables('VNetname'))]",
+        "[concat('Microsoft.Storage/storageAccounts', variables('StandardStorageAccountDisplayName'))]",
+        "[concat('Microsoft.Storage/storageAccounts', variables('PremiumStorageAccountDisplayName'))]"
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
