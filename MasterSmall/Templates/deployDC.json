@@ -117,7 +117,7 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-          "domainNameLabel": "[variables('DCPIPDnsName')]"
+          "domainNameLabel": "[variables('DCPIPDnsName')]",
         }
       }
     }
