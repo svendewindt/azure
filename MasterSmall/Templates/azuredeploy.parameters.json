@@ -16,6 +16,9 @@
         },
         "DCTemplateFileName": {
             "value": "1"
+        },
+        "DCSize": {
+            "value": "Standard_A3"
         }
        
     }
