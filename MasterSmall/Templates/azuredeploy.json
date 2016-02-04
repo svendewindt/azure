@@ -53,6 +53,28 @@
       }
     },
 
+    "DCSize": {
+      "type": "string",
+      "defaultValue": "Standard_D1",
+      "allowedValues": [
+        "Standard_A1",
+        "Standard_A2",
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2"
+      ],
+      "metadata": {
+        "desciption": "Size of the domain controller."
+      }
+    },
+
     "_artifactsLocation": {
       "type": "string"
     },
@@ -154,8 +176,8 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Network/virtualNetworks/',variables('VNetname'))]",
-        "[concat('Microsoft.Storage/storageAccounts', variables('StandardStorageAccountDisplayName'))]",
-        "[concat('Microsoft.Storage/storageAccounts', variables('PremiumStorageAccountDisplayName'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', variables('StandardStorageAccountName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('PremiumStorageAccountName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -171,7 +193,8 @@
           "DCName": { "value": "[variables('DC01Name')]" },
           "DCAdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "DCAdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
-          "DCWindowsOSVersion": {"value": "[parameters('DCWindowsOSVersion')]"}
+          "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
+          "DCSize": {"value": "parameters('DCSize"}
         }
       }
     }

@@ -15,13 +15,14 @@
       "minLength": 1
     },
     "DCAdminPassword": { "type": "securestring" },
-    "DCWindowsOSVersion": { "type": "string" }
+    "DCWindowsOSVersion": { "type": "string" },
+    "DCSize": {"type": "string"}
   },
   "variables": {
     "DCImagePublisher": "MicrosoftWindowsServer",
     "DCImageOffer": "WindowsServer",
     "DCOSDiskName": "DCOSDisk",
-    "DCVmSize": "Standard_D1",
+    "DCVmSize": "[parameters('DCSize')]",
     "DCVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
     "DCSubnetRef": "[concat(variables('DCVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
     "DCStorageAccountContainerName": "vhds",
