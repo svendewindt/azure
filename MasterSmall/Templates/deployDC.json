@@ -28,7 +28,7 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', parameters('VNetName'))]"
+        
       ],
       "tags": {
         "displayName": "DCNic"
