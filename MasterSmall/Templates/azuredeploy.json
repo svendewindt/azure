@@ -182,7 +182,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/Templates/deployDC.json",
+          "uri": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/Templates/createDC.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
