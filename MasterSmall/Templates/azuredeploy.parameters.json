@@ -2,20 +2,21 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "projectNaam": {
-            "value": "demoDeploy"
-        },
-        "domainPassword": {
-            "value": "Enter123"
+        "Project Name": {
+            "value": "demod"
         },
         "Windows Domain name": {
             "value": "sven.local"
         },
-        "Project Name": {
-            "value": "James"
+        "domainAdminPassword": {
+            "value": "Enter123"
         },
-        "Location": {
-            "value": "East US2"
+        "DCTemplateFolder": {
+            "value": "1"
+        },
+        "DCTemplateFileName": {
+            "value": "1"
         }
+       
     }
 }

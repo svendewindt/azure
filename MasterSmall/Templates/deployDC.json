@@ -4,14 +4,8 @@
   "parameters": {
     "Location": { "type": "string" },
     "StorageAccountName": { "type": "string" },
-    "StorageAccountType": { "type": "string" },
-    "StorageAccountDisplayName": { "type": "string" },
     "VNetName": { "type": "string" },
-    "VNetPrefix": { "type": "string" },
     "VNetSubnet1Name": { "type": "string" },
-    "VNetSubnet1Prefix": { "type": "string" },
-    "VNetSubnet2Name": { "type": "string" },
-    "VNetSubnet2Prefix": { "type": "string" },
     "DCName": {"type": "string","minLength": 1},
     "DCAdminUserName": {"type": "string","minLength": 1},
     "DCAdminPassword": {"type": "securestring"},
@@ -22,63 +16,19 @@
     "DCImageOffer": "WindowsServer",
     "DCOSDiskName": "DCOSDisk",
     "DCVmSize": "Standard_D1",
-    "DCVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'VNet')]",
+    "DCVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
     "DCSubnetRef": "[concat(variables('DCVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
     "DCStorageAccountContainerName": "vhds",
     "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]"
   },
   "resources": [
     {
-      "name": "[parameters('StorageAccountName')]",
-      "type": "Microsoft.Storage/storageAccounts",
-      "location": "[parameters('Location')]",
-      "apiVersion": "2015-06-15",
-      "dependsOn": [ ],
-      "tags": {
-        "displayName": "[parameters('StorageAccountDisplayName')]"
-      },
-      "properties": {
-        "accountType": "[parameters('StorageAccountType')]"
-      }
-    },
-    {
-      "name": "VNet",
-      "type": "Microsoft.Network/virtualNetworks",
-      "location": "[parameters('Location')]",
-      "apiVersion": "2015-06-15",
-      "dependsOn": [ ],
-      "tags": {
-        "displayName": "[parameters('VNetName')]"
-      },
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('VNetPrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[parameters('VNetSubnet1Name')]",
-            "properties": {
-              "addressPrefix": "[parameters('VNetSubnet1Prefix')]"
-            }
-          },
-          {
-            "name": "[parameters('VNetSubnet2Name')]",
-            "properties": {
-              "addressPrefix": "[parameters('VNetSubnet2Prefix')]"
-            }
-          }
-        ]
-      }
-    },
-    {
       "name": "[variables('DCNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', 'VNet')]"
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('VNetName'))]"
       ],
       "tags": {
         "displayName": "DCNic"

@@ -156,7 +156,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('_artifactsLocation'), '/', parameters('DCTemplateFolder'), '/', parameters('DCTemplateFileName'), parameters('_artifactsLocationSasToken'))]",
+          "uri": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/Templates/deployDC.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
