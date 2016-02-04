@@ -97,10 +97,10 @@
     }
   },
   "variables": {
-    "StandardStorageAccountName": "[tolower(concat('standard',parameters('Project Name')))]",
+    "StandardStorageAccountName": "[tolower(concat(parameters('Project Name'),'standard'))]",
     "StandardStorageAccountType": "Standard_LRS",
     "StandardStorageAccountDisplayName": "StandardStorageAccount",
-    "PremiumStorageAccountName": "[tolower(concat('prem' ,parameters('Project Name')))]",
+    "PremiumStorageAccountName": "[tolower(concat(parameters('Project Name'),'prem' ))]",
     "PremiumStorageAccountType": "Premium_LRS",
     "PremiumStorageAccountDisplayName": "PremiumStorageAccount",
     "VNetName": "VNet",
