@@ -22,7 +22,7 @@
     "DCImagePublisher": "MicrosoftWindowsServer",
     "DCImageOffer": "WindowsServer",
     "DCOSDiskName": "DCOSDisk",
-    "DCVmSize": "[parameters('DCSize')]",
+    "DCVmSize": "Standard_A3",
     "DCVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
     "DCSubnetRef": "[concat(variables('DCVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
     "DCStorageAccountContainerName": "vhds",
