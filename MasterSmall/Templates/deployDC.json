@@ -27,7 +27,7 @@
     "DCStorageAccountContainerName": "vhds",
     "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]",
     "DCPIPName": "DCPIP",
-    "DCPIPDnsName": "[parameters('DCName')]"
+    "DCPIPDnsName": "[tolower(parameters('DCName'))]"
   },
   "resources": [
     {
