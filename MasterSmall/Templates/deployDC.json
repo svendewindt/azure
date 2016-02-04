@@ -6,10 +6,16 @@
     "StorageAccountName": { "type": "string" },
     "VNetName": { "type": "string" },
     "VNetSubnet1Name": { "type": "string" },
-    "DCName": {"type": "string","minLength": 1},
-    "DCAdminUserName": {"type": "string","minLength": 1},
-    "DCAdminPassword": {"type": "securestring"},
-    "DCWindowsOSVersion": {"type": "string"}
+    "DCName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "DCAdminUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "DCAdminPassword": { "type": "securestring" },
+    "DCWindowsOSVersion": { "type": "string" }
   },
   "variables": {
     "DCImagePublisher": "MicrosoftWindowsServer",
@@ -19,7 +25,9 @@
     "DCVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
     "DCSubnetRef": "[concat(variables('DCVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
     "DCStorageAccountContainerName": "vhds",
-    "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]"
+    "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]",
+    "DCPIPName": "DCPIP",
+    "DCPIPDnsName": "[parameters('DCName')]"
   },
   "resources": [
     {
@@ -28,7 +36,8 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('DCPIPName'))]"
+
       ],
       "tags": {
         "displayName": "DCNic"
@@ -38,9 +47,13 @@
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "172.16.0.10",
               "subnet": {
                 "id": "[variables('DCSubnetRef')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('DCPIPName'))]"
               }
             }
           }
@@ -89,6 +102,22 @@
               "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('DCNicName'))]"
             }
           ]
+        }
+      }
+    },
+    {
+      "name": "[variables('DCPIPName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "DCPIP"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('DCPIPDnsName')]"
         }
       }
     }
