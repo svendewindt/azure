@@ -2,10 +2,7 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "Location": {
-      "type": "string",
-      "maxLength": 1
-    },
+    "Location": { "type": "string" },
     "AdminUserName": {
       "type": "string",
       "minLength": 1
@@ -17,7 +14,7 @@
       "type": "string",
       "minLength": 1
     },
-    "AssetLocation": {"type": "string"}
+    "AssetLocation": { "type": "string" }
   },
   "variables": {
     "InstallADConfigurationFunction": "InstallADConfiguration.ps1\\Main",
@@ -45,11 +42,11 @@
           "modulesUrl": "[variables('modulesUrl')]",
           "configurationFunction": "[variables('configurationFunction')]",
           "properties": {
-          
+
           }
         },
         "protectedSettings": {
-         
+
         }
       }
     }
