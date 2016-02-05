@@ -2,118 +2,38 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "primaryADName": {
+    "Location": {
       "type": "string",
-      "metadata": {
-        "description": "The VM name of Primary AD"
-      }
+      "maxLength": 1
     },
-
-    "domainName": {
+    "AdminUserName": {
       "type": "string",
-      "metadata": {
-        "description": "The domain name"
-      }
+      "minLength": 1
     },
-
-    "location": {
+    "AdminPassword": {
+      "type": "securestring"
+    },
+    "DomainName": {
       "type": "string",
-      "allowedValues": [
-        "West US",
-        "East US",
-        "East US 2",
-        "Central US",
-        "South Central US",
-        "North Central US",
-        "North Europe",
-        "West Europe",
-        "East Asia",
-        "Southeast Asia",
-        "Japan East",
-        "Japan West",
-        "Brazil South",
-        "Australia East",
-        "Australia Southeast",
-        "Central India",
-        "South India",
-        "West India"
-      ],
-      "metadata": {
-        "description": "The region to deploy the resources into"
-      }
+      "minLength": 1
     },
-
-    "adminUsername": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the Administrator of the new VMs and Domain"
-      }
-    },
-    "adminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "The password for the Administrator account of the new VMs and Domain"
-      }
-    },
-
-    "assetLocation": {
-      "type": "string",
-      "metadata": {
-        "description": "The location of resources that the script is dependent on such as linked templates and DSC modules"
-      }
-    }
+    "AssetLocation": {"type": "string"}
   },
   "variables": {
-    "apiVersion": "2015-01-01",
-    "apiVersionNetworks": "2015-06-15",
-    "apiVersionVirtualMachines": "2015-06-15",
-    "apiVersionVMExtensions": "2015-06-15",
-    "apiVersionStorage": "2015-06-15",
-    "adPDCModulesURL": "[concat(parameters('assetLocation'),'/CreateADPDC.ps1.zip')]",
-    "adPDCConfigurationFunction": "CreateADPDC.ps1\\CreateADPDC"
+    "InstallADConfigurationFunction": "InstallADConfiguration.ps1\\Main",
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/installDNS.zip')]",
+    "configurationFunction": "[concat(parameters('AssetLocation'),'installDNS\\DNS')]"
   },
   "resources": [
     {
+      "name": "InstallAD",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('primaryADName'),'/InstallDomainController')]",
-      "apiVersion": "[variables('apiVersionVMExtensions')]",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-      ],
-      "properties": {
-        "publisher": "Microsoft.Powershell",
-        "type": "DSC",
-        "typeHandlerVersion": "2.13",
-        "autoUpgradeMinorVersion": false,
-        "settings": {
-          "wmfVersion": "4.0",
-          "modulesUrl": "[variables('adPDCModulesURL')]",
-          "configurationFunction": "[variables('adPDCConfigurationFunction')]",
-          "properties": {
-            "domainName": "[parameters('domainName')]",
-            "adminCreds": {
-              "userName": "[parameters('adminUserName')]",
-              "password": "PrivateSettingsRef:adminPassword"
-            }
-          }
-        },
-        "protectedSettings": {
-          "items": {
-            "adminPassword": "[parameters('adminPassword')]"
-          }
-        }
-      }
-    },
-
-    {
-      "name": "dscCreateDomain",
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
       ],
       "tags": {
-        "displayName": "dscCreateDomain"
+        "displayName": "InstallAD"
       },
       "properties": {
         "publisher": "Microsoft.Powershell",
@@ -121,19 +41,20 @@
         "typeHandlerVersion": "2.9",
         "autoUpgradeMinorVersion": true,
         "settings": {
-          "modulesUrl": "[concat(parameters('_artifactsLocation'), '/', 'dsc.zip')]",
-          "sasToken": "[parameters('_artifactsLocationSasToken')]",
-          "configurationFunction": "[variables('dscCreateDomainConfigurationFunction')]",
+          "wmfVersion": "4.0",
+          "modulesUrl": "[variables('modulesUrl')]",
+          "configurationFunction": "[variables('configurationFunction')]",
           "properties": {
-            "nodeName": "[parameters('vmName')]"
+
           }
         },
-        "protectedSettings": { }
+        "protectedSettings": {
+
+        }
       }
     }
-    
 
   ],
-    "outputs": {
-    }
+  "outputs": {
+  }
 }

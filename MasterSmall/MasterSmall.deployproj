@@ -35,10 +35,11 @@
     <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
     <Content Include="Templates\azuredeploy.json" />
     <Content Include="Templates\azuredeploy.parameters.json" />
-    <Content Include="DSC\dscCreateDomainConfiguration.ps1" />
+    <Content Include="DSC\InstallADConfiguration.ps1" />
+    <None Include="DSC\installDNS.zip" />
     <None Include="Templates\createDC.json" />
+    <None Include="Templates\installAD-example.json" />
     <None Include="Templates\installAD.json" />
-    <None Include="Templates\installChrome.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Tools\AzCopy.exe" />

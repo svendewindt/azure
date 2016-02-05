@@ -8,18 +8,13 @@
         "Windows Domain name": {
             "value": "sven.local"
         },
-        "domainAdminPassword": {
+        "DomainAdminPassword": {
             "value": "Enter123"
-        },
-        "DCTemplateFolder": {
-            "value": "1"
-        },
-        "DCTemplateFileName": {
-            "value": "1"
         },
         "DCSize": {
             "value": "Standard_D2_v2"
         }
+        
        
     }
 }

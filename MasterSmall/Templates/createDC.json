@@ -2,7 +2,7 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "Location": { "type": "string" },
+    "Location": { "type": "string"},
     "StorageAccountName": { "type": "string" },
     "VNetName": { "type": "string" },
     "VNetSubnet1Name": { "type": "string" },
@@ -10,11 +10,11 @@
       "type": "string",
       "minLength": 1
     },
-    "DCAdminUserName": {
+    "AdminUserName": {
       "type": "string",
       "minLength": 1
     },
-    "DCAdminPassword": { "type": "securestring" },
+    "AdminPassword": { "type": "securestring" },
     "DCWindowsOSVersion": { "type": "string" },
     "DCSize": {"type": "string"}
   },
@@ -78,8 +78,8 @@
         },
         "osProfile": {
           "computerName": "[parameters('DCName')]",
-          "adminUsername": "[parameters('DCAdminUsername')]",
-          "adminPassword": "[parameters('DCAdminPassword')]"
+          "adminUsername": "[parameters('AdminUsername')]",
+          "adminPassword": "[parameters('AdminPassword')]"
         },
         "storageProfile": {
           "imageReference": {
