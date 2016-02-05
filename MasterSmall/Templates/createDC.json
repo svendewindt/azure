@@ -32,7 +32,7 @@
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installDNS.zip')]",
-    "configurationFunction": "[concat(parameters('AssetLocation'),'installDNS\\DNS')]"
+    "configurationFunction": "[concat(parameters('AssetLocation'),'installDNS.ps1\\DNS')]"
 
   },
   "resources": [
