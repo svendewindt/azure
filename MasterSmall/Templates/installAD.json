@@ -21,7 +21,7 @@
   },
   "variables": {
     "InstallADConfigurationFunction": "InstallADConfiguration.ps1\\Main",
-    "modulesUrl": "[concat(parameters('AssetLocation'),'/installDNS.zip')]",
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installDNS.zip')]",
     "configurationFunction": "[concat(parameters('AssetLocation'),'installDNS\\DNS')]"
   },
   "resources": [
@@ -45,11 +45,11 @@
           "modulesUrl": "[variables('modulesUrl')]",
           "configurationFunction": "[variables('configurationFunction')]",
           "properties": {
-
+          
           }
         },
         "protectedSettings": {
-
+         
         }
       }
     }
