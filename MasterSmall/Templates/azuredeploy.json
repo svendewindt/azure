@@ -178,29 +178,8 @@
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
-          "DCSize": { "value": "[parameters('DCSize')]" }
-        }
-      }
-    },
-    {
-      "name": "InstallAD",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "[concat('Microsoft.Resources/deployments/','CreateDC')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(parameters('AssetLocation'),'/Templates/installAD.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "Location": { "value": "[parameters('Location')]" },
-          "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
-          "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
-          "DomainName": { "value": "[parameters('Windows Domain Name')]" },
-          "AssetLocation": {"value": "[parameters('AssetLocation')]"}
+          "DCSize": { "value": "[parameters('DCSize')]" },
+          "AssetLocation": { "value": "[parameters('AssetLocation')]" }
         }
       }
     }

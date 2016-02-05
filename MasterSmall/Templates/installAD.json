@@ -21,11 +21,10 @@
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installDNS.zip')]",
     "configurationFunction": "[concat(parameters('AssetLocation'),'installDNS\\DNS')]"
   },
-
   "resources": [
     {
       "name": "InstallAD",
-      "type": "extensions",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
