@@ -81,7 +81,7 @@
     },
     "FileLocation": {
       "type": "string",
-      "defaultValue": "https://github.com/svendewindt/azure/blob/master/MasterSmall/"
+      "defaultValue": "https://github.com/svendewindt/azure/blob/master/MasterSmall"
     }
   },
   "variables": {
