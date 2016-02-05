@@ -39,7 +39,6 @@
     <None Include="DSC\installDNS.zip" />
     <None Include="Templates\createDC.json" />
     <None Include="Templates\installAD-example.json" />
-    <None Include="Templates\installAD.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Tools\AzCopy.exe" />

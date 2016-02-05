@@ -17,7 +17,7 @@
     "AdminPassword": { "type": "securestring" },
     "DCWindowsOSVersion": { "type": "string" },
     "DCSize": { "type": "string" },
-    "AssetLocation": { "type": "string" }
+    "FileLocation": { "type": "string" }
   },
   "variables": {
     "DCImagePublisher": "MicrosoftWindowsServer",
@@ -31,9 +31,8 @@
     "DCPIPName": "DCPIP",
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
-    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installDNS.zip')]",
-    "configurationFunction": "[concat(parameters('AssetLocation'),'installDNS.ps1\\DNS')]"
-
+    "modulesUrl": "[concat(parameters('FileLocation'),'/DSC/installDNS.zip')]",
+    "configurationFunction": "installDNS.ps1\\DNS"
   },
   "resources": [
     {
