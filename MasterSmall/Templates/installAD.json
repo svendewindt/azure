@@ -84,7 +84,7 @@
         "publisher": "Microsoft.Powershell",
         "type": "DSC",
         "typeHandlerVersion": "2.13",
-		    "autoUpgradeMinorVersion": false,
+        "autoUpgradeMinorVersion": false,
         "settings": {
           "wmfVersion": "4.0",
           "modulesUrl": "[variables('adPDCModulesURL')]",
@@ -103,7 +103,36 @@
           }
         }
       }
+    },
+
+    {
+      "name": "dscCreateDomain",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+      ],
+      "tags": {
+        "displayName": "dscCreateDomain"
+      },
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.9",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "modulesUrl": "[concat(parameters('_artifactsLocation'), '/', 'dsc.zip')]",
+          "sasToken": "[parameters('_artifactsLocationSasToken')]",
+          "configurationFunction": "[variables('dscCreateDomainConfigurationFunction')]",
+          "properties": {
+            "nodeName": "[parameters('vmName')]"
+          }
+        },
+        "protectedSettings": { }
+      }
     }
+    
+
   ],
     "outputs": {
     }

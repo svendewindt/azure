@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "demod"
+            "value": "BmSmall"
         },
         "Windows Domain name": {
             "value": "sven.local"
@@ -18,7 +18,7 @@
             "value": "1"
         },
         "DCSize": {
-            "value": "Standard_D1_v2"
+            "value": "Standard_D2_v2"
         }
        
     }

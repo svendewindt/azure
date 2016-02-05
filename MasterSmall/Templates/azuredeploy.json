@@ -24,14 +24,14 @@
         "description": "Name for the Windows domain."
       }
     },
-    "domainAdmin": {
+    "DomainAdmin": {
       "type": "string",
       "defaultValue": "adminSVDW",
       "metadata": {
         "description": "Name for the domain administrator."
       }
     },
-    "domainAdminPassword": {
+    "DomainAdminPassword": {
       "type": "securestring",
       "minLength": 8,
       "metadata": {
@@ -75,25 +75,9 @@
       }
     },
 
-    "_artifactsLocation": {
-      "type": "string"
-    },
-    "_artifactsLocationSasToken": {
-      "type": "securestring"
-    },
-    "DCTemplateFolder": {
+    "AssetLocation": {
       "type": "string",
-      "minLength": 1,
-      "metadata": {
-        "description": "template location. This path is relative to the _artifactsLocation parameter"
-      }
-    },
-    "DCTemplateFileName": {
-      "type": "string",
-      "minLength": 1,
-      "metadata": {
-        "description": "Name of the nested template file"
-      }
+      "defaultValue": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall"
     }
   },
   "variables": {
@@ -182,7 +166,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/Templates/createDC.json",
+          "uri": "[concat(parameters('AssetLocation'),'/Templates/createDC.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
