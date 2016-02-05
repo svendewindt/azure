@@ -31,7 +31,7 @@
     "DCPIPName": "DCPIP",
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
-    "modulesUrl": "[concat(parameters('FileLocation'),'/DSC/installDNS.zip')]",
+    "modulesUrl": "https://github.com/svendewindt/azure/blob/master/MasterSmall/DSC/installDNS.zip",
     "configurationFunction": "installDNS.ps1\\DNS"
   },
   "resources": [
