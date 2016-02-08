@@ -141,7 +141,7 @@
             },
             "protectedSettings": {
               "items": {
-                "adminPassword": "[parameters('AdminPassword')]"
+                "adminPassword": "Enter123"
               }
 
             }
