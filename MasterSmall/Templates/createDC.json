@@ -128,20 +128,20 @@
             "typeHandlerVersion": "2.9",
             "autoUpgradeMinorVersion": true,
             "settings": {
-              "wmfVersion": "5.0",
+              "wmfVersion": "4.0",
               "modulesUrl": "[variables('modulesUrl')]",
               "configurationFunction": "[variables('configurationFunction')]",
               "properties": {
                 "domainName": "[parameters('DomainName')]",
                 "adminCreds": {
                   "userName": "[parameters('AdminUserName')]",
-                  "password": "PrivateSettingsRef: adminPassword"
+                  "password": "PrivateSettingsRef:AdminPassword"
                 }
               }
             },
             "protectedSettings": {
               "items": {
-                "adminPassword": "[parameters('adminPassword')]"
+                "adminPassword": "[parameters('AdminPassword')]"
               }
 
             }
