@@ -127,7 +127,7 @@
             "typeHandlerVersion": "2.9",
             "autoUpgradeMinorVersion": true,
             "settings": {
-              "wmfVersion": "4.0",
+              "wmfVersion": "5.0",
               "modulesUrl": "[variables('modulesUrl')]",
               "configurationFunction": "[variables('configurationFunction')]",
               "properties": {
