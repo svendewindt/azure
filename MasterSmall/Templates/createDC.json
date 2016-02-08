@@ -31,7 +31,7 @@
     "DCPIPName": "DCPIP",
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
-    "modulesUrl": "[concat(parameters('FileLocation'),'/DSC/installDNS.zip')]",
+    "modulesUrl": "[concat(parameters('FileLocation'),'/DSC/installDNS.ps1.zip')]",
     "configurationFunction": "installDNS.ps1\\DNS"
   },
   "resources": [
@@ -45,7 +45,7 @@
 
       ],
       "tags": {
-        "displayName": "DCNic"
+        "displayName": "[variables('DCNicName')]"
       },
       "properties": {
         "ipConfigurations": [
@@ -128,7 +128,7 @@
             "autoUpgradeMinorVersion": true,
             "settings": {
               "wmfVersion": "4.0",
-              "modulesUrl": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/DSC/installDNS.ps1.zip",
+              "modulesUrl": "[variables('modulesUrl')]",
               "configurationFunction": "[variables('configurationFunction')]",
               "properties": {
 
@@ -148,7 +148,7 @@
       "apiVersion": "2015-06-15",
       "dependsOn": [ ],
       "tags": {
-        "displayName": "DCPIP"
+        "displayName": "[variables('DCPIPName')]"
       },
       "properties": {
         "publicIPAllocationMethod": "Dynamic",

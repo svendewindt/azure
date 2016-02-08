@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "BmSmall2"
+            "value": "BmSmall"
         },
         "Windows Domain name": {
             "value": "sven.local"
@@ -12,7 +12,7 @@
             "value": "Enter123"
         },
         "DCSize": {
-            "value": "Standard_D3_v2"
+            "value": "Standard_D2_v2"
         }
         
        
