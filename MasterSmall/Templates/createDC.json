@@ -135,7 +135,7 @@
                 "domainName": "[parameters('DomainName')]",
                 "adminCreds": {
                   "userName": "[parameters('AdminUserName')]",
-                  "password": "PrivateSettingsRef:AdminPassword"
+                  "password": "Enter123"
                 }
               }
             },
