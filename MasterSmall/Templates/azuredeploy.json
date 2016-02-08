@@ -183,7 +183,7 @@
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
           "DCSize": { "value": "[parameters('DCSize')]" },
-          "FileLocation": { "value": "[parameters('FileLocation')]" }
+          "AssetLocation": { "value": "[parameters('AssetLocation')]" }
         }
       }
     }
