@@ -181,6 +181,7 @@
           "DCName": { "value": "[variables('DC01Name')]" },
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
+          "DomainName": { "value": "[parameters('Windows Domain name')]" },
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
           "DCSize": { "value": "[parameters('DCSize')]" },
           "AssetLocation": { "value": "[parameters('AssetLocation')]" }

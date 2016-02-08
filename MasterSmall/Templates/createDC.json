@@ -15,6 +15,7 @@
       "minLength": 1
     },
     "AdminPassword": { "type": "securestring" },
+    "DomainName": {"type": "string"},
     "DCWindowsOSVersion": { "type": "string" },
     "DCSize": { "type": "string" },
     "AssetLocation": { "type": "string" }
@@ -131,10 +132,17 @@
               "modulesUrl": "[variables('modulesUrl')]",
               "configurationFunction": "[variables('configurationFunction')]",
               "properties": {
-
+                "domainName": "[parameters('DomainName')]",
+                "adminCreds": {
+                  "userName": "[parameters('AdminUserName')]",
+                  "password": "PrivateSettingsRef: adminPassword"
+                }
               }
             },
             "protectedSettings": {
+              "items": {
+                "adminPassword": "[parameters('adminPassword')]"
+              }
 
             }
           }
