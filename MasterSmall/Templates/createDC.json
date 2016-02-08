@@ -128,7 +128,7 @@
             "autoUpgradeMinorVersion": true,
             "settings": {
               "wmfVersion": "4.0",
-              "modulesUrl": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/DSC/installDNS.zip",
+              "modulesUrl": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/DSC/installDNS.ps1.zip",
               "configurationFunction": "[variables('configurationFunction')]",
               "properties": {
 

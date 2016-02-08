@@ -36,7 +36,7 @@
     <Content Include="Templates\azuredeploy.json" />
     <Content Include="Templates\azuredeploy.parameters.json" />
     <Content Include="DSC\installADConfiguration.ps1" />
-    <None Include="DSC\installDNS.zip" />
+    <None Include="DSC\installDNS.ps1.zip" />
     <None Include="Templates\createDC.json" />
   </ItemGroup>
   <ItemGroup>
