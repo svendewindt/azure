@@ -88,7 +88,7 @@
     "PremiumStorageAccountName": "[tolower(concat(parameters('Project Name'),'prem' ))]",
     "PremiumStorageAccountType": "Premium_LRS",
     "PremiumStorageAccountDisplayName": "PremiumStorageAccount",
-    "VNetName": "VNet",
+    "VNetName": "[concat(parameters('Project Name'),'VNet')]",
     "VNetPrefix": "172.16.0.0/16",
     "VNetSubnet1Name": "DCs",
     "VNetSubnet1Prefix": "172.16.0.0/24",
