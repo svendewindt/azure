@@ -97,7 +97,7 @@
             "version": "latest"
           },
           "osDisk": {
-            "name": "RDSOSDisk",
+            "name": "[variables('RDSOSDiskName')]",
             "vhd": {
               "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('RDSStorageAccountContainerName'), '/', variables('RDSOSDiskName'), '.vhd')]"
             },
@@ -111,6 +111,29 @@
               "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('RDSNicName'))]"
             }
           ]
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('RDSName'),'/joindomain')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('RDSName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "JsonADDomainExtension",
+        "typeHandlerVersion": "1.0",
+        "settings": {
+          "Name": "[parameters('DomainName')]",
+          "User": "[concat(parameters('DomainName'), '\\', parameters('AdminUserName'))]",
+          "Restart": "true",
+          "Options": "3"
+        },
+        "protectedsettings": {
+          "Password": "[parameters('AdminPassword')]"
         }
       }
     },

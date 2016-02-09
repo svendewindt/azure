@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "Bm1"
+            "value": "Bm2"
         },
         "Windows Domain name": {
             "value": "sven.local"
@@ -19,14 +19,8 @@
         },
         "RDSSize": {
             "value": "Standard_D2_v2"
-        },
-        "UpdateVNetDNSTemplateFolder": {
-            "value": "1"
-        },
-        "UpdateVNetDNSTemplateFileName": {
-            "value": "1"
         }
-        
+       
        
     }
 }

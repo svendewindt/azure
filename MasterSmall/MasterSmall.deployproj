@@ -29,6 +29,7 @@
     <Folder Include="Tools\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CustomScripts\1.ps1" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>
     </None>
@@ -43,6 +44,7 @@
     <None Include="Templates\test.json" />
     <None Include="Templates\test2.json" />
     <None Include="Templates\testAD.json" />
+    <None Include="Templates\testAddDomain.json" />
     <None Include="Templates\testsqltemplate.json" />
     <None Include="Templates\updateVNetDNS.json" />
   </ItemGroup>

@@ -98,7 +98,7 @@
             "version": "latest"
           },
           "osDisk": {
-            "name": "DCOSDisk",
+            "name": "[variables('DCOSDiskName')]",
             "vhd": {
               "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('DCStorageAccountContainerName'), '/', variables('DCOSDiskName'), '.vhd')]"
             },
