@@ -4,6 +4,7 @@
   "parameters": {
     "Project Name": {
       "type": "string",
+      "defaultValue": "",
       "minLength": 1,
       "metadata": {
         "description": "Name for the project. This will be used to name other resources."
@@ -78,10 +79,6 @@
     "AssetLocation": {
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall"
-    },
-    "FileLocation": {
-      "type": "string",
-      "defaultValue": "https://github.com/svendewindt/azure/blob/master/MasterSmall"
     }
   },
   "variables": {
