@@ -117,7 +117,7 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('RDSName'),'/joindomain')]",
+      "name": "[concat(parameters('RDSName'),'/JoinDomain')]",
       "location": "[parameters('Location')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('RDSName'))]"
