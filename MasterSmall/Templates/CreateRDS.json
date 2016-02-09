@@ -1,154 +1,131 @@
 ﻿{
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "1Type": {
-            "type": "string",
-            "defaultValue": "Standard_LRS",
-            "allowedValues": [
-                "Standard_LRS",
-                "Standard_ZRS",
-                "Standard_GRS",
-                "Standard_RAGRS",
-                "Premium_LRS"
-            ]
-        },
-        "RDSName": {
-            "type": "string",
-            "minLength": 1
-        },
-        "RDSAdminUserName": {
-            "type": "string",
-            "minLength": 1
-        },
-        "RDSAdminPassword": {
-            "type": "securestring"
-        },
-        "RDSWindowsOSVersion": {
-            "type": "string",
-            "defaultValue": "2012-R2-Datacenter",
-            "allowedValues": [
-                "2008-R2-SP1",
-                "2012-Datacenter",
-                "2012-R2-Datacenter",
-                "Windows-Server-Technical-Preview"
-            ]
-        },
-        "PIPDnsName": {
-            "type": "string",
-            "minLength": 1
-        }
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Location": { "type": "string" },
+    "StorageAccountName": { "type": "string" },
+    "VNetName": { "type": "string" },
+    "VNetSubnet1Name": { "type": "string" },
+    "RDSName": {
+      "type": "string",
+      "minLength": 1
     },
-    "variables": {
-        "1Name": "[concat('1', uniqueString(resourceGroup().id))]",
-        "1Prefix": "10.0.0.0/16",
-        "1Subnet1Name": "Subnet-1",
-        "1Subnet1Prefix": "10.0.0.0/24",
-        "1Subnet2Name": "Subnet-2",
-        "1Subnet2Prefix": "10.0.1.0/24",
-        "RDSImagePublisher": "MicrosoftWindowsServer",
-        "RDSImageOffer": "WindowsServer",
-        "RDSOSDiskName": "RDSOSDisk",
-        "RDSVmSize": "Standard_D1",
-        "RDSVnetID": "[resourceId('Microsoft.Network/virtualNetworks', '1')]",
-        "RDSSubnetRef": "[concat(variables('RDSVnetID'), '/subnets/', variables('1Subnet1Name'))]",
-        "RDSStorageAccountContainerName": "vhds",
-        "RDSNicName": "[concat(parameters('RDSName'), 'NetworkInterface')]",
-        "PIPName": "PIP"
+    "AdminUserName": {
+      "type": "string",
+      "minLength": 1
     },
-    "resources": [
-        {
-            "name": "[variables('RDSNicName')]",
-            "type": "Microsoft.Network/networkInterfaces",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', '1')]",
-                "[concat('Microsoft.Network/publicIPAddresses/', variables('PIPName'))]"
-            ],
-            "tags": {
-                "displayName": "RDSNic"
-            },
+    "AdminPassword": { "type": "securestring" },
+    "DomainName": { "type": "string" },
+    "RDSWindowsOSVersion": { "type": "string" },
+    "RDSSize": { "type": "string" },
+    "AssetLocation": { "type": "string" }
+  },
+  "variables": {
+    "RDSImagePublisher": "MicrosoftWindowsServer",
+    "RDSImageOffer": "WindowsServer",
+    "RDSOSDiskName": "DCOSDisk",
+    "RDSVmSize": "[parameters('RDSSize')]",
+    "RDSVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
+    "RDSSubnetRef": "[concat(variables('RDSVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
+    "RDSStorageAccountContainerName": "vhds",
+    "RDSNicName": "[concat(parameters('RDSName'), 'NetworkInterface')]",
+    "RDSPIPName": "[concat(parameters('RDSName'), 'PIP')]",
+    "RDSPIPDnsName": "[tolower(parameters('RDSName'))]",
+    "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installAD.ps1.zip')]",
+    "configurationFunction": "installAD.ps1\\installAD"
+  },
+  "resources": [
+    {
+      "name": "[variables('RDSNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+      ],
+      "tags": {
+        "displayName": "[variables('RDSNicName')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
             "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[variables('RDSSubnetRef')]"
-                            },
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('PIPName'))]"
-                            }
-                        }
-                    }
-                ]
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "172.16.1.20",
+              "subnet": {
+                "id": "[variables('RDSSubnetRef')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('RDSPIPName'))]"
+              }
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('RDSName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('RDSNicName'))]"
+      ],
+      "tags": {
+        "displayName": "[parameters('RDSName')]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('RDSVmSize')]"
         },
-        {
-            "name": "[parameters('RDSName')]",
-            "type": "Microsoft.Compute/virtualMachines",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/', variables('1Name'))]",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('RDSNicName'))]"
-            ],
-            "tags": {
-                "displayName": "RDS"
-            },
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "[variables('RDSVmSize')]"
-                },
-                "osProfile": {
-                    "computerName": "[parameters('RDSName')]",
-                    "adminUsername": "[parameters('RDSAdminUsername')]",
-                    "adminPassword": "[parameters('RDSAdminPassword')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "[variables('RDSImagePublisher')]",
-                        "offer": "[variables('RDSImageOffer')]",
-                        "sku": "[parameters('RDSWindowsOSVersion')]",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "name": "RDSOSDisk",
-                        "vhd": {
-                            "uri": "[concat('http://', variables('1Name'), '.blob.core.windows.net/', variables('RDSStorageAccountContainerName'), '/', variables('RDSOSDiskName'), '.vhd')]"
-                        },
-                        "caching": "ReadWrite",
-                        "createOption": "FromImage"
-                    }
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('RDSNicName'))]"
-                        }
-                    ]
-                }
-            }
+        "osProfile": {
+          "computerName": "[parameters('RDSName')]",
+          "adminUsername": "[parameters('AdminUsername')]",
+          "adminPassword": "[parameters('AdminPassword')]"
         },
-        {
-            "name": "[variables('PIPName')]",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [ ],
-            "tags": {
-                "displayName": "PIP"
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('RDSImagePublisher')]",
+            "offer": "[variables('RDSImageOffer')]",
+            "sku": "[parameters('RDSWindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "RDSOSDisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('RDSStorageAccountContainerName'), '/', variables('RDSOSDiskName'), '.vhd')]"
             },
-            "properties": {
-                "publicIPAllocationMethod": "Dynamic",
-                "dnsSettings": {
-                    "domainNameLabel": "[parameters('PIPDnsName')]"
-                }
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('RDSNicName'))]"
             }
+          ]
         }
-    ],
-    "outputs": {
+      }
+    },
+    {
+      "name": "[variables('RDSPIPName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "PIP"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('RDSPIPName')]"
+        }
+      }
     }
+  ],
+  "outputs": {
+  }
 }

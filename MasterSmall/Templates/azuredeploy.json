@@ -44,8 +44,6 @@
       "type": "string",
       "defaultValue": "2012-R2-Datacenter",
       "allowedValues": [
-        "2008-R2-SP1",
-        "2012-Datacenter",
         "2012-R2-Datacenter",
         "Windows-Server-Technical-Preview"
       ],
@@ -75,6 +73,39 @@
         "desciption": "Size of the domain controller."
       }
     },
+    "RDSWindowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2012-R2-Datacenter",
+        "Windows-Server-Technical-Preview"
+      ],
+      "metadata": {
+        "description": "Windows version for the RDS server."
+      }
+    },
+    "RDSSize": {
+      "type": "string",
+      "defaultValue": "Standard_D1_v2",
+      "allowedValues": [
+        "Standard_A1",
+        "Standard_A2",
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2"
+      ],
+      "metadata": {
+        "description": "Size of the RDS server."
+      }
+
+    },
 
     "AssetLocation": {
       "type": "string",
@@ -94,7 +125,8 @@
     "VNetSubnet1Prefix": "172.16.0.0/24",
     "VNetSubnet2Name": "Servers",
     "VNetSubnet2Prefix": "172.16.1.0/24",
-    "DC01Name": "[concat(parameters('Project Name'),'DC01')]"
+    "DC01Name": "[concat(parameters('Project Name'),'DC01')]",
+    "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]"
 
   },
   "resources": [
@@ -184,7 +216,35 @@
           "AssetLocation": { "value": "[parameters('AssetLocation')]" }
         }
       }
-    }
+    },
+      {
+          "name": "CreateRDS",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+        "dependsOn": [
+          "[concat('Microsoft.Resources/deployments/','createDC')]"
+        ],
+        "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+            "uri": "[concat(parameters('AssetLocation'),'/Templates/createRDS.json')]",
+            "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+            "Location": { "value": "[parameters('Location')]" },
+            "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
+            "Vnetname": { "value": "[variables('VNetname')]" },
+            "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
+            "RDSName": { "value": "[variables('RDS01Name')]" },
+            "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
+            "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
+            "DomainName": { "value": "[parameters('Windows Domain name')]" },
+            "RDSWindowsOSVersion": { "value": "[parameters('RDSWindowsOSVersion')]" },
+            "RDSSize": { "value": "[parameters('RDSSize')]" },
+            "AssetLocation": { "value": "[parameters('AssetLocation')]" }
+          }
+        }
+      }
   ],
   "outputs": {
     "DCSize": {

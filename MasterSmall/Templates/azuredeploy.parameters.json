@@ -15,7 +15,10 @@
             "value": "Standard_D3_v2"
         },
         "DCWindowsOSVersion": {
-            "value": "Windows-Server-Technical-Preview"
+            "value": "2012-R2-Datacenter"
+        },
+        "RDSSize": {
+            "value": "Standard_D3_v2"
         }
         
        
