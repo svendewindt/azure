@@ -43,6 +43,8 @@
     <None Include="Templates\test.json" />
     <None Include="Templates\test2.json" />
     <None Include="Templates\testAD.json" />
+    <None Include="Templates\testsqltemplate.json" />
+    <None Include="Templates\updateVNetDNS.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Tools\AzCopy.exe" />

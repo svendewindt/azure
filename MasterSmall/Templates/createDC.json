@@ -18,6 +18,10 @@
     "DomainName": {"type": "string"},
     "DCWindowsOSVersion": { "type": "string" },
     "DCSize": { "type": "string" },
+    "DCIPAddress": {
+      "type": "string",
+      "minLength": 4
+    },
     "AssetLocation": { "type": "string" }
   },
   "variables": {
@@ -54,7 +58,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "172.16.0.10",
+              "privateIPAddress": "[parameters('DCIPAddress')]",
               "subnet": {
                 "id": "[variables('DCSubnetRef')]"
               },

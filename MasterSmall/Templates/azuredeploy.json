@@ -73,6 +73,14 @@
         "desciption": "Size of the domain controller."
       }
     },
+    "DCIPaddress": {
+      "type": "string",
+      "minLength": 4,
+      "defaultValue": "172.16.0.10",
+      "metadata": {
+        "description": "IP address for the DC."
+      }
+    },
     "RDSWindowsOSVersion": {
       "type": "string",
       "defaultValue": "2012-R2-Datacenter",
@@ -104,12 +112,39 @@
       "metadata": {
         "description": "Size of the RDS server."
       }
-
+    },
+    "RDSIPAddress": {
+      "type": "string",
+      "defaultValue": "172.16.1.20",
+      "minLength": 4,
+      "metadata": {
+        "description": "IP address for the RDS server."
+      }
     },
 
     "AssetLocation": {
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall"
+    },
+    "_artifactsLocation": {
+      "type": "string"
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring"
+    },
+    "UpdateVNetDNSTemplateFolder": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "template location. This path is relative to the _artifactsLocation parameter"
+      }
+    },
+    "UpdateVNetDNSTemplateFileName": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Name of the nested template file"
+      }
     }
   },
   "variables": {
@@ -213,38 +248,66 @@
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
           "DCSize": { "value": "[parameters('DCSize')]" },
+          "DCIPAddress": {"value": "[parameters('DCIPAddress')]"},
           "AssetLocation": { "value": "[parameters('AssetLocation')]" }
         }
       }
     },
-      {
-          "name": "CreateRDS",
-          "type": "Microsoft.Resources/deployments",
-          "apiVersion": "2015-01-01",
-        "dependsOn": [
-          "[concat('Microsoft.Resources/deployments/','createDC')]"
-        ],
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "[concat(parameters('AssetLocation'),'/Templates/createRDS.json')]",
-            "contentVersion": "1.0.0.0"
-          },
-          "parameters": {
-            "Location": { "value": "[parameters('Location')]" },
-            "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
-            "Vnetname": { "value": "[variables('VNetname')]" },
-            "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
-            "RDSName": { "value": "[variables('RDS01Name')]" },
-            "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
-            "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
-            "DomainName": { "value": "[parameters('Windows Domain name')]" },
-            "RDSWindowsOSVersion": { "value": "[parameters('RDSWindowsOSVersion')]" },
-            "RDSSize": { "value": "[parameters('RDSSize')]" },
-            "AssetLocation": { "value": "[parameters('AssetLocation')]" }
-          }
+    {
+      "name": "UpdateVNetDNS",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createDC')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/', parameters('UpdateVNetDNSTemplateFolder'), '/', parameters('UpdateVNetDNSTemplateFileName'), parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "Location": { "value": "[parameters('location')]" },
+          "VNetName": { "value": "[variables('VNetname')]" },
+          "VNetPrefix": { "value": "[variables('VNetPrefix')]" },
+          "VNetSubnet1Name": { "value": "[variables('VNetSubnet1Name')]" },
+          "VNetSubnet1Prefix": { "value": "[variables('VNetSubnet1Prefix')]" },
+          "VNetSubnet2Name": { "value": "[variables('VNetSubnet2Name')]" },
+          "VNetSubnet2Prefix": { "value": "[variables('VNetSubnet2Prefix')]" },
+          "DNSServer": { "value": "[parameters('DCIPAddress')]" }
         }
       }
+    },
+    {
+      "name": "CreateRDS",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createDC')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('AssetLocation'),'/Templates/createRDS.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "Location": { "value": "[parameters('Location')]" },
+          "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
+          "Vnetname": { "value": "[variables('VNetname')]" },
+          "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
+          "RDSName": { "value": "[variables('RDS01Name')]" },
+          "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
+          "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
+          "DomainName": { "value": "[parameters('Windows Domain name')]" },
+          "RDSWindowsOSVersion": { "value": "[parameters('RDSWindowsOSVersion')]" },
+          "RDSSize": { "value": "[parameters('RDSSize')]" },
+          "RDSIPAddress": { "value": "[parameters('RDSIPAddress')]" },
+          "AssetLocation": { "value": "[parameters('AssetLocation')]" }
+        }
+      }
+    }
+
   ],
   "outputs": {
     "DCSize": {

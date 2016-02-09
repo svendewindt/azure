@@ -18,6 +18,10 @@
     "DomainName": { "type": "string" },
     "RDSWindowsOSVersion": { "type": "string" },
     "RDSSize": { "type": "string" },
+    "RDSIPAddress": {
+      "type": "string",
+      "minLength": 4
+    },
     "AssetLocation": { "type": "string" }
   },
   "variables": {
@@ -53,7 +57,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "172.16.1.20",
+              "privateIPAddress": "[parameters('RDSIPAddress')]",
               "subnet": {
                 "id": "[variables('RDSSubnetRef')]"
               },
