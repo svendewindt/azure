@@ -38,7 +38,11 @@
     <Content Include="DSC\installADConfiguration.ps1" />
     <None Include="DSC\installAD.ps1.zip" />
     <None Include="Templates\createDC.json" />
+    <None Include="Templates\createRDS.json" />
+    <None Include="Templates\createSQL.json" />
     <None Include="Templates\test.json" />
+    <None Include="Templates\test2.json" />
+    <None Include="Templates\testAD.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Tools\AzCopy.exe" />
