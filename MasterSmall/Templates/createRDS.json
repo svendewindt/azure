@@ -23,7 +23,7 @@
   "variables": {
     "RDSImagePublisher": "MicrosoftWindowsServer",
     "RDSImageOffer": "WindowsServer",
-    "RDSOSDiskName": "DCOSDisk",
+    "RDSOSDiskName": "[concat(parameters('RDSName'),'OSDisk')]",
     "RDSVmSize": "[parameters('RDSSize')]",
     "RDSVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
     "RDSSubnetRef": "[concat(variables('RDSVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",

@@ -23,7 +23,7 @@
   "variables": {
     "DCImagePublisher": "MicrosoftWindowsServer",
     "DCImageOffer": "WindowsServer",
-    "DCOSDiskName": "DCOSDisk",
+    "DCOSDiskName": "[concat(parameters('DCName'),'OSDisk')]",
     "DCVmSize": "[parameters('DCSize')]",
     "DCVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
     "DCSubnetRef": "[concat(variables('DCVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
