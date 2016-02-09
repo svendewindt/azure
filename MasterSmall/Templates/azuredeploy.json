@@ -4,8 +4,9 @@
   "parameters": {
     "Project Name": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "Cust1",
       "minLength": 1,
+      "maxLength": 10,
       "metadata": {
         "description": "Name for the project. This will be used to name other resources."
       }

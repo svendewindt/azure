@@ -33,7 +33,7 @@
     "RDSSubnetRef": "[concat(variables('RDSVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
     "RDSStorageAccountContainerName": "vhds",
     "RDSNicName": "[concat(parameters('RDSName'), 'NetworkInterface')]",
-    "RDSPIPName": "[tolower(concat(parameters('RDSName'), 'PIP'))]",
+    "RDSPIPName": "[concat(parameters('RDSName'), 'PublicIP')]",
     "RDSPIPDnsName": "[tolower(parameters('RDSName'))]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installAD.ps1.zip')]",

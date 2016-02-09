@@ -33,7 +33,7 @@
     "DCSubnetRef": "[concat(variables('DCVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
     "DCStorageAccountContainerName": "vhds",
     "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]",
-    "DCPIPName": "[concat(parameters('DCName'), 'PIP')]",
+    "DCPIPName": "[concat(parameters('DCName'), 'PublicIP')]",
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installAD.ps1.zip')]",
