@@ -1,0 +1,39 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Location": {"type": "string"},
+    "AssetLocation": { "type": "string" }
+  },
+  "variables": {
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installDNS.ps1.zip')]",
+    "configurationFunction": "installDNS.ps1\\DNS"
+  },
+   "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "setupRDS",
+      "apiVersion": "2015-06-15",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.13",
+        "autoUpgradeMinorVersion": false,
+        "settings": {
+          "wmfVersion": "4.0",
+          "modulesUrl": "[variables('modulesUrl')]",
+          "configurationFunction": "[variables('configurationFunction')]",
+          "properties": {
+          }
+        },
+        "protectedSettings": {
+        }
+      }
+    }
+  ],
+    "outputs": {
+    }
+}

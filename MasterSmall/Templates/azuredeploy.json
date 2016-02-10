@@ -270,8 +270,26 @@
           "AssetLocation": { "value": "[variables('AssetLocation')]" }
         }
       }
-    }
-
+    },
+      {
+          "name": "SetupRDS",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2015-01-01",
+        "dependsOn": [
+          "[concat('Microsoft.Resources/deployments/','createRDS')]"
+        ],
+          "properties": {
+              "mode": "Incremental",
+              "templateLink": {
+                  "uri": "[concat(variables('AssetLocation'),'/Templates/setupRDS.json')]",
+                  "contentVersion": "1.0.0.0"
+              },
+            "parameters": {
+              "Location": { "value": "[parameters('Location')]" },
+              "AssetLocation": { "value": "[variables('AssetLocation')]" }
+            }
+          }
+      }
   ],
   "outputs": {
     "DCSize": {
