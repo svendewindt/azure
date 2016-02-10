@@ -38,6 +38,7 @@
     <Content Include="Templates\azuredeploy.parameters.json" />
     <Content Include="DSC\installADConfiguration.ps1" />
     <None Include="DSC\installAD.ps1.zip" />
+    <Content Include="DSC\testDSCConfiguration.ps1" />
     <None Include="Templates\createDC.json" />
     <None Include="Templates\createRDS.json" />
     <None Include="Templates\createSQL.json" />
@@ -45,6 +46,7 @@
     <None Include="Templates\test2.json" />
     <None Include="Templates\testAD.json" />
     <None Include="Templates\testAddDomain.json" />
+    <None Include="Templates\testRDS.json" />
     <None Include="Templates\testsqltemplate.json" />
     <None Include="Templates\updateVNetDNS.json" />
   </ItemGroup>

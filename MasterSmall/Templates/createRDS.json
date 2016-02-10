@@ -149,7 +149,7 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-          "domainNameLabel": "[variables('RDSPIPName')]"
+          "domainNameLabel": "[variables('RDSPIPDnsName')]"
         }
       }
     }
