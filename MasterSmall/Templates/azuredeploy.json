@@ -74,14 +74,6 @@
         "desciption": "Size of the domain controller."
       }
     },
-    "DCIPaddress": {
-      "type": "string",
-      "minLength": 4,
-      "defaultValue": "172.16.0.10",
-      "metadata": {
-        "description": "IP address for the DC."
-      }
-    },
     "RDSWindowsOSVersion": {
       "type": "string",
       "defaultValue": "2012-R2-Datacenter",
@@ -114,15 +106,6 @@
         "description": "Size of the RDS server."
       }
     },
-    "RDSIPAddress": {
-      "type": "string",
-      "defaultValue": "172.16.1.20",
-      "minLength": 4,
-      "metadata": {
-        "description": "IP address for the RDS server."
-      }
-    },
-
     "AssetLocation": {
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall"
@@ -142,7 +125,9 @@
     "VNetSubnet2Name": "Servers",
     "VNetSubnet2Prefix": "172.16.1.0/24",
     "DC01Name": "[concat(parameters('Project Name'),'DC01')]",
-    "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]"
+    "DCIPaddress": "172.16.0.10",
+    "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]",
+    "RDSIPAddress": "172.16.1.20"
 
   },
   "resources": [
@@ -229,7 +214,7 @@
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
           "DCSize": { "value": "[parameters('DCSize')]" },
-          "DCIPAddress": {"value": "[parameters('DCIPAddress')]"},
+          "DCIPAddress": {"value": "[variables('DCIPAddress')]"},
           "AssetLocation": { "value": "[parameters('AssetLocation')]" }
         }
       }
@@ -255,7 +240,7 @@
           "VNetSubnet1Prefix": { "value": "[variables('VNetSubnet1Prefix')]" },
           "VNetSubnet2Name": { "value": "[variables('VNetSubnet2Name')]" },
           "VNetSubnet2Prefix": { "value": "[variables('VNetSubnet2Prefix')]" },
-          "DNSServer": { "value": "[parameters('DCIPAddress')]" }
+          "DNSServer": { "value": "[variables('DCIPAddress')]" }
         }
       }
     },
@@ -284,7 +269,7 @@
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
           "RDSWindowsOSVersion": { "value": "[parameters('RDSWindowsOSVersion')]" },
           "RDSSize": { "value": "[parameters('RDSSize')]" },
-          "RDSIPAddress": { "value": "[parameters('RDSIPAddress')]" },
+          "RDSIPAddress": { "value": "[variables('RDSIPAddress')]" },
           "AssetLocation": { "value": "[parameters('AssetLocation')]" }
         }
       }
