@@ -2,7 +2,8 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
   "parameters": {
-    "Location": {"type": "string"},
+    "Location": { "type": "string" },
+    "ServerName": {"type": "string"},
     "AssetLocation": { "type": "string" }
   },
   "variables": {
@@ -12,7 +13,7 @@
    "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "Cust3RDS01/setupRDS",
+      "name": "[concat(parameters('ServerName'),'/setupRDS')]",
       "apiVersion": "2015-06-15",
       "location": "[parameters('location')]",
       "dependsOn": [

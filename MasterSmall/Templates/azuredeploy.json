@@ -286,6 +286,7 @@
               },
             "parameters": {
               "Location": { "value": "[parameters('Location')]" },
+              "ServerName": { "value": "[variables('RDS01Name')]" },
               "AssetLocation": { "value": "[variables('AssetLocation')]" }
             }
           }
