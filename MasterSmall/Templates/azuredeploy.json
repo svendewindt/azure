@@ -105,10 +105,6 @@
       "metadata": {
         "description": "Size of the RDS server."
       }
-    },
-    "AssetLocation": {
-      "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall"
     }
   },
   "variables": {
@@ -127,7 +123,8 @@
     "DC01Name": "[concat(parameters('Project Name'),'DC01')]",
     "DCIPaddress": "172.16.0.10",
     "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]",
-    "RDSIPAddress": "172.16.1.20"
+    "RDSIPAddress": "172.16.1.20",
+    "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall"
 
   },
   "resources": [
@@ -200,7 +197,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('AssetLocation'),'/Templates/createDC.json')]",
+          "uri": "[concat(variables('AssetLocation'),'/Templates/createDC.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -215,7 +212,7 @@
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
           "DCSize": { "value": "[parameters('DCSize')]" },
           "DCIPAddress": {"value": "[variables('DCIPAddress')]"},
-          "AssetLocation": { "value": "[parameters('AssetLocation')]" }
+          "AssetLocation": { "value": "[variables('AssetLocation')]" }
         }
       }
     },
@@ -229,7 +226,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('AssetLocation'),'/Templates/updateVNetDNS.json')]",
+          "uri": "[concat(variables('AssetLocation'),'/Templates/updateVNetDNS.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -255,7 +252,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('AssetLocation'),'/Templates/createRDS.json')]",
+          "uri": "[concat(variables('AssetLocation'),'/Templates/createRDS.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -270,7 +267,7 @@
           "RDSWindowsOSVersion": { "value": "[parameters('RDSWindowsOSVersion')]" },
           "RDSSize": { "value": "[parameters('RDSSize')]" },
           "RDSIPAddress": { "value": "[variables('RDSIPAddress')]" },
-          "AssetLocation": { "value": "[parameters('AssetLocation')]" }
+          "AssetLocation": { "value": "[variables('AssetLocation')]" }
         }
       }
     }
