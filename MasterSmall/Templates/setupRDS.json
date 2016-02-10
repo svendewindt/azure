@@ -12,7 +12,7 @@
    "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "VM/setupRDS",
+      "name": "Cust3RDS01/setupRDS",
       "apiVersion": "2015-06-15",
       "location": "[parameters('location')]",
       "dependsOn": [
