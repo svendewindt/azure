@@ -325,7 +325,7 @@
       }
     },
     {
-      "name": "SetupRDS",
+      "name": "InstallRDSBroker_RDSLicensing_WebAccess",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
@@ -334,17 +334,14 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('AssetLocation'),'/Templates/setupRDS.json')]",
+          "uri": "[concat(variables('AssetLocation'),'/Templates/installRDSBroker_RDSLicensing_RDSWebAccess.json')]",
           "contentVersion": "1.0.0.0"
         },
-        "parameters": {
-          "Location": { "value": "[parameters('Location')]" },
-          "ServerName": { "value": "[variables('RDS01Name')]" },
-          "AssetLocation": { "value": "[variables('AssetLocation')]" },
-          "WMFversion": { "value": "variables('WMFversion')" }
-        }
+        "parameters": { }
       }
     }
+ 
+
 
   ],
   "outputs": {
