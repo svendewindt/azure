@@ -4,7 +4,11 @@
   "parameters": {
     "Location": { "type": "string" },
     "ServerName": {"type": "string"},
-    "AssetLocation": { "type": "string" }
+    "AssetLocation": { "type": "string" },
+    "WMFversion": {
+      "type": "string",
+      "defaultValue": "5.00"
+    }
   },
   "variables": {
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installDNS.ps1.zip')]",
@@ -24,7 +28,7 @@
         "typeHandlerVersion": "2.13",
         "autoUpgradeMinorVersion": true,
         "settings": {
-          "wmfVersion": "4.0",
+          "wmfVersion": "[parameters('WMFversion')]",
           "modulesUrl": "[variables('modulesUrl')]",
           "configurationFunction": "[variables('configurationFunction')]",
           "properties": {

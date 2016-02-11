@@ -22,7 +22,11 @@
       "type": "string",
       "minLength": 4
     },
-    "AssetLocation": { "type": "string" }
+    "AssetLocation": { "type": "string" },
+    "WMFversion": {
+      "type": "string",
+        "defaultValue": "5.0"
+    }
   },
   "variables": {
     "DCImagePublisher": "MicrosoftWindowsServer",
@@ -132,7 +136,7 @@
             "typeHandlerVersion": "2.9",
             "autoUpgradeMinorVersion": true,
             "settings": {
-              "wmfVersion": "5.0",
+              "wmfVersion": "[parameters('WMFversion')]",
               "modulesUrl": "[variables('modulesUrl')]",
               "configurationFunction": "[variables('configurationFunction')]",
               "properties": {

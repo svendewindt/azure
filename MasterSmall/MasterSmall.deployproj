@@ -70,4 +70,9 @@
     </Content>
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Templates_4updateVNetDNS_1json__JSONSchema="http://json.schemastore.org/resjson" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
