@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "Cust3"
+            "value": "Cust4"
         },
         "Windows Domain name": {
             "value": "sven.local"

@@ -124,7 +124,7 @@
     "DCIPaddress": "172.16.0.10",
     "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]",
     "RDSIPAddress": "172.16.1.20",
-    "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall"
+    "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall",
       "WMFVersion": "5.0"
 
   },
