@@ -213,7 +213,7 @@
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
           "DCSize": { "value": "[parameters('DCSize')]" },
           "DCIPAddress": {"value": "[variables('DCIPAddress')]"},
-          "AssetLocation": { "value": "[variables('AssetLocation')]" }
+          "AssetLocation": { "value": "[variables('AssetLocation')]" },
           "WMFversion": {"value": "variables('WMFversion')"}
         }
       }
@@ -289,7 +289,7 @@
             "parameters": {
               "Location": { "value": "[parameters('Location')]" },
               "ServerName": { "value": "[variables('RDS01Name')]" },
-              "AssetLocation": { "value": "[variables('AssetLocation')]" }
+              "AssetLocation": { "value": "[variables('AssetLocation')]" },
               "WMFversion": {"value": "variables('WMFversion')"}
             }
           }
