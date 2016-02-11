@@ -105,6 +105,24 @@
       "metadata": {
         "description": "Size of the RDS server."
       }
+    },
+    "Edition": {
+      "type": "string",
+      "defaultValue": "Standard",
+      "allowedValues": [
+        "Standard",
+        "Enterprise"
+      ]
+    },
+    "SQLSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS2",
+      "allowedValues": [
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4"
+      ]
     }
   },
   "variables": {
@@ -123,7 +141,9 @@
     "DC01Name": "[concat(parameters('Project Name'),'DC01')]",
     "DCIPaddress": "172.16.0.10",
     "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]",
-    "RDSIPAddress": "172.16.1.20",
+    "RDS01IPAddress": "172.16.1.20",
+    "SQL01Name": "[concat(parameters('Project Name'), 'SQL01')]",
+    "SQL01IPAddress": "172.16.1.30",
     "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall",
     "WMFVersion": "5.0"
 
@@ -212,9 +232,9 @@
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
           "DCSize": { "value": "[parameters('DCSize')]" },
-          "DCIPAddress": {"value": "[variables('DCIPAddress')]"},
+          "DCIPAddress": { "value": "[variables('DCIPAddress')]" },
           "AssetLocation": { "value": "[variables('AssetLocation')]" },
-          "WMFversion": {"value": "[variables('WMFversion')]"}
+          "WMFversion": { "value": "[variables('WMFversion')]" }
         }
       }
     },
@@ -268,32 +288,64 @@
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
           "RDSWindowsOSVersion": { "value": "[parameters('RDSWindowsOSVersion')]" },
           "RDSSize": { "value": "[parameters('RDSSize')]" },
-          "RDSIPAddress": { "value": "[variables('RDSIPAddress')]" },
+          "RDSIPAddress": { "value": "[variables('RDS01IPAddress')]" },
           "AssetLocation": { "value": "[variables('AssetLocation')]" }
         }
       }
     },
-      {
-          "name": "SetupRDS",
-          "type": "Microsoft.Resources/deployments",
-          "apiVersion": "2015-01-01",
-        "dependsOn": [
-          "[concat('Microsoft.Resources/deployments/','createRDS')]"
-        ],
-          "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                  "uri": "[concat(variables('AssetLocation'),'/Templates/setupRDS.json')]",
-                  "contentVersion": "1.0.0.0"
-              },
-            "parameters": {
-              "Location": { "value": "[parameters('Location')]" },
-              "ServerName": { "value": "[variables('RDS01Name')]" },
-              "AssetLocation": { "value": "[variables('AssetLocation')]" },
-              "WMFversion": {"value": "variables('WMFversion')"}
-            }
-          }
+
+    {
+      "name": "CreateSQL",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createDC')]",
+        "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('AssetLocation'),'/Templates/createSQL.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "Location": { "value": "[parameters('Location')]" },
+          "StorageAccountName": { "value": "[variables('PremiumStorageAccountName')]" },
+          "Vnetname": { "value": "[variables('VNetname')]" },
+          "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
+          "SQLName": { "value": "[variables('SQL01Name')]" },
+          "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
+          "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
+          "DomainName": { "value": "[parameters('Windows Domain name')]" },
+          "Edition": { "value": "[parameters('Edition')]" },
+          "SQLSize": { "value": "[parameters('SQLSize')]" },
+          "SQLIPAddress": { "value": "[variables('SQL01IPAddress')]" },
+          "AssetLocation": { "value": "[variables('AssetLocation')]" }
+        }
       }
+    },
+    {
+      "name": "SetupRDS",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createRDS')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('AssetLocation'),'/Templates/setupRDS.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "Location": { "value": "[parameters('Location')]" },
+          "ServerName": { "value": "[variables('RDS01Name')]" },
+          "AssetLocation": { "value": "[variables('AssetLocation')]" },
+          "WMFversion": { "value": "variables('WMFversion')" }
+        }
+      }
+    }
+
   ],
   "outputs": {
     "DCSize": {
