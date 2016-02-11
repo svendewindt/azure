@@ -337,7 +337,12 @@
           "uri": "[concat(variables('AssetLocation'),'/Templates/installRDSBroker_RDSLicensing_RDSWebAccess.json')]",
           "contentVersion": "1.0.0.0"
         },
-        "parameters": { }
+        "parameters": {
+          "Location": { "value": "[parameters('Location')]" },
+          "ServerName": { "value": "[variables('RDS01Name')]" },
+          "AssetLocation": { "value": "[variables('AssetLocation')]" },
+          "WMFversion": { "value": "variables('WMFversion')" }
+        }
       }
     }
  
