@@ -339,9 +339,9 @@
         },
         "parameters": {
           "Location": { "value": "[parameters('Location')]" },
-          "ServerName": { "value": "[variables('RDS01Name')]" },
+          "ServerName": { "value": "[variables('DC01Name')]" },
           "AssetLocation": { "value": "[variables('AssetLocation')]" },
-          "WMFversion": { "value": "variables('WMFversion')" }
+          "WMFversion": { "value": "[variables('WMFversion')]" }
         }
       }
     }
