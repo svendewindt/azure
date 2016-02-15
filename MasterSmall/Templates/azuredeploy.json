@@ -118,7 +118,6 @@
       "type": "string",
       "defaultValue": "Standard_DS2",
       "allowedValues": [
-        "Standard_DS1",
         "Standard_DS2",
         "Standard_DS3",
         "Standard_DS4"

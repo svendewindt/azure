@@ -123,7 +123,7 @@
             {
               "name": "[variables('SQLBackupDiskName')]",
               "diskSizeGB": "512",
-              "lun": 1,
+              "lun": 2,
               "vhd": {
                 "uri": "[concat('http://', parameters('StandardStorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLBackupDiskName'), '.vhd')]"
               },
