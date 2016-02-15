@@ -3,7 +3,8 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "Location": { "type": "string" },
-    "StorageAccountName": { "type": "string" },
+    "PremiumStorageAccountName": { "type": "string" },
+    "StandardStorageAccountName": { "type": "string" },
     "VNetName": { "type": "string" },
     "VNetSubnet1Name": { "type": "string" },
     "SQLName": {
@@ -30,6 +31,7 @@
     "SQLOSDiskName": "[concat(parameters('SQLName'),'OSDisk')]",
     "SQLDataDiskName": "[concat(parameters('SQLName'),'DataDisk')]",
     "SQLLogDiskName": "[concat(parameters('SQLName'),'LogDisk')]",
+    "SQLBackupDiskName": "[concat(parameters('SQLName'),'BackupDisk')]",
     "SQLVmSize": "[parameters('SQLSize')]",
     "SQLVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
     "SQLSubnetRef": "[concat(variables('SQLVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
@@ -39,7 +41,8 @@
     "SQLPIPDnsName": "[tolower(parameters('SQLName'))]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installAD.ps1.zip')]",
-    "configurationFunction": "installAD.ps1\\installAD"
+    "configurationFunction": "installAD.ps1\\installAD",
+    "ConfigureDisksConfigurationFunction": "ConfigureDisksConfiguration.ps1\\Main"
   },
   "resources": [
     {
@@ -104,7 +107,7 @@
               "diskSizeGB": "512",
               "lun": 0,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLDataDiskName'), '.vhd')]"
+                "uri": "[concat('http://', parameters('PremiumStorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLDataDiskName'), '.vhd')]"
               },
               "createOption": "Empty"
             },
@@ -113,7 +116,16 @@
               "diskSizeGB": "512",
               "lun": 1,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLLogDiskName'), '.vhd')]"
+                "uri": "[concat('http://', parameters('PremiumStorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLLogDiskName'), '.vhd')]"
+              },
+              "createOption": "Empty"
+            },
+            {
+              "name": "[variables('SQLBackupDiskName')]",
+              "diskSizeGB": "512",
+              "lun": 1,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StandardStorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLBackupDiskName'), '.vhd')]"
               },
               "createOption": "Empty"
             }
@@ -121,7 +133,7 @@
           "osDisk": {
             "name": "[variables('SQLOSDiskName')]",
             "vhd": {
-              "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLOSDiskName'), '.vhd')]"
+              "uri": "[concat('http://', parameters('PremiumStorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLOSDiskName'), '.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -134,7 +146,10 @@
             }
           ]
         }
-      }
+      },
+        "resources": [
+            
+        ]
     },
     {
       "apiVersion": "2015-06-15",

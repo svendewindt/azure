@@ -310,7 +310,8 @@
         },
         "parameters": {
           "Location": { "value": "[parameters('Location')]" },
-          "StorageAccountName": { "value": "[variables('PremiumStorageAccountName')]" },
+          "PremiumStorageAccountName": { "value": "[variables('PremiumStorageAccountName')]" },
+          "StandardStorageAccountName": { "value": "[variables('PremiumStorageAccountName')]" },
           "Vnetname": { "value": "[variables('VNetname')]" },
           "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
           "SQLName": { "value": "[variables('SQL01Name')]" },
