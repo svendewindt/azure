@@ -112,7 +112,10 @@
       "allowedValues": [
         "Standard",
         "Enterprise"
-      ]
+      ],
+      "metadata": {
+        "description": "Edition of the SQL server."
+      }
     },
     "SQLSize": {
       "type": "string",
@@ -121,7 +124,10 @@
         "Standard_DS2",
         "Standard_DS3",
         "Standard_DS4"
-      ]
+      ],
+      "metadata": {
+        "description": "Size of the SQL server. (Op premium storage)"
+      }
     }
   },
   "variables": {

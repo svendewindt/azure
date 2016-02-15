@@ -43,9 +43,8 @@
     "SQLNicName": "[concat(parameters('SQLName'), 'NetworkInterface')]",
     "SQLPIPName": "[concat(parameters('SQLName'), 'PublicIP')]",
     "SQLPIPDnsName": "[tolower(parameters('SQLName'))]",
-    "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureSQLDisks.ps1.zip')]",
-    "configurationFunction": "configureDSLDisks.ps1\\setDisks"
+    "configurationFunction": "configureSQLDisks.ps1\\setDisks"
 
   },
   "resources": [
@@ -126,7 +125,7 @@
             },
             {
               "name": "[variables('SQLBackupDiskName')]",
-              "diskSizeGB": "512",
+              "diskSizeGB": "1023",
               "lun": 2,
               "vhd": {
                 "uri": "[concat('http://', parameters('StandardStorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLBackupDiskName'), '.vhd')]"
@@ -151,11 +150,37 @@
           ]
         }
       },
-        "resources": [
-            
-            
-            
-        ]
+      "resources": [
+
+        {
+          "name": "configureDisks",
+          "type": "extensions",
+          "location": "[parameters('Location')]",
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('SQLName'))]"
+          ],
+          "tags": {
+            "displayName": "configureDisks"
+          },
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.9",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "wmfVersion": "[parameters('WMFversion')]",
+              "modulesUrl": "[variables('modulesUrl')]",
+              "configurationFunction": "[variables('ConfigurationFunction')]",
+              "properties": {
+                "nodeName": "[parameters('SQLName')]"
+              }
+            },
+            "protectedSettings": { }
+          }
+        }
+
+      ]
     },
     {
       "apiVersion": "2015-06-15",
