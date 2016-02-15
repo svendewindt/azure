@@ -23,7 +23,11 @@
       "type": "string",
       "minLength": 4
     },
-    "AssetLocation": { "type": "string" }
+    "AssetLocation": { "type": "string" },
+    "WMFversion": {
+      "type": "string",
+      "defaultValue": "5.0"
+    }
   },
   "variables": {
     "SQLImagePublisher": "MicrosoftSQLServer",
@@ -40,9 +44,9 @@
     "SQLPIPName": "[concat(parameters('SQLName'), 'PublicIP')]",
     "SQLPIPDnsName": "[tolower(parameters('SQLName'))]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
-    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installAD.ps1.zip')]",
-    "configurationFunction": "installAD.ps1\\installAD",
-    "ConfigureDisksConfigurationFunction": "ConfigureDisksConfiguration.ps1\\Main"
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureSQLDisks.ps1.zip')]",
+    "configurationFunction": "configureDSLDisks.ps1\\setDisks"
+
   },
   "resources": [
     {
@@ -148,6 +152,8 @@
         }
       },
         "resources": [
+            
+            
             
         ]
     },
