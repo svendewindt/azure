@@ -323,28 +323,8 @@
           "AssetLocation": { "value": "[variables('AssetLocation')]" }
         }
       }
-    },
-    {
-      "name": "InstallRDSBroker_RDSLicensing_WebAccess",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "[concat('Microsoft.Resources/deployments/','createRDS')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('AssetLocation'),'/Templates/installRDSBroker_RDSLicensing_RDSWebAccess.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "Location": { "value": "[parameters('Location')]" },
-          "ServerName": { "value": "[variables('DC01Name')]" },
-          "AssetLocation": { "value": "[variables('AssetLocation')]" },
-          "WMFversion": { "value": "[variables('WMFversion')]" }
-        }
-      }
     }
+    
   ],
   "outputs": {
     "DCSize": {
