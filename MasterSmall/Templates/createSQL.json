@@ -28,6 +28,8 @@
     "SQLImagePublisher": "MicrosoftSQLServer",
     "SQLImageOffer": "SQL2014SP1-WS2012R2",
     "SQLOSDiskName": "[concat(parameters('SQLName'),'OSDisk')]",
+    "SQLDataDiskName": "[concat(parameters('SQLName'),'DataDisk')]",
+    "SQLLogDiskName": "[concat(parameters('SQLName'),'LogDisk')]",
     "SQLVmSize": "[parameters('SQLSize')]",
     "SQLVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
     "SQLSubnetRef": "[concat(variables('SQLVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
@@ -96,6 +98,26 @@
             "sku": "[parameters('Edition')]",
             "version": "latest"
           },
+          "dataDisks": [
+            {
+              "name": "[variables('SQLDataDiskName')]",
+              "diskSizeGB": "512",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLDataDiskName'), '.vhd')]"
+              },
+              "createOption": "Empty"
+            },
+            {
+              "name": "[variables('SQLLogDiskName')]",
+              "diskSizeGB": "512",
+              "lun": 1,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('SQLStorageAccountContainerName'), '/', variables('SQLLogDiskName'), '.vhd')]"
+              },
+              "createOption": "Empty"
+            }
+          ],
           "osDisk": {
             "name": "[variables('SQLOSDiskName')]",
             "vhd": {
