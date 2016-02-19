@@ -1,0 +1,116 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Location": { "type": "string" },
+    "StorageAccountName": { "type": "string" },
+    "VNetName": { "type": "string" },
+    "VNetSubnet1Name": { "type": "string" },
+    "RDSWebAccessName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "AdminUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "AdminPassword": { "type": "securestring" },
+    "DomainName": { "type": "string" },
+    "RDSWebAccessWindowsOSVersion": { "type": "string" },
+    "RDSWebAccessSize": { "type": "string" },
+    "RDSWebAccessIPAddress": {
+      "type": "string",
+      "minLength": 4
+    },
+    "AssetLocation": { "type": "string" },
+  },
+  "variables": {
+    "RDSWebAccessImagePublisher": "MicrosoftWindowsServer",
+    "RDSWebAccessImageOffer": "WindowsServer",
+    "RDSWebAccessOSDiskName": "[concat(parameters('RDSWebAccessName'),'OSDisk')]",
+    "RDSWebAccessVmSize": "[parameters('RDSWebAccessSize')]",
+    "RDSWebAccessVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
+    "RDSWebAccessSubnetRef": "[concat(variables('RDSWebAccessVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
+    "RDSWebAccessStorageAccountContainerName": "vhds",
+    "RDSWebAccessNicName": "[concat(parameters('RDSWebAccessName'), 'NetworkInterface')]",
+    "RDSWebAccessPIPName": "[concat(parameters('RDSWebAccessName'), 'PublicIP')]",
+    "RDSWebAccessPIPDnsName": "[tolower(parameters('RDSWebAccessName'))]",
+    "installARDSWebAccessonfigurationFunction": "installARDSWebAccessonfiguration.ps1\\Main",
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installAD.ps1.zip')]",
+    "configurationFunction": "installAD.ps1\\installAD"
+  },
+    "resources": [
+      {
+        "name": "[variables('RDSWebAccessNicName')]",
+        "type": "Microsoft.Network/networkInterfaces",
+        "location": "[parameters('Location')]",
+        "apiVersion": "2015-06-15",
+        "dependsOn": [
+        ],
+        "tags": {
+          "displayName": "[variables('RDSWebAccessNicName')]"
+        },
+        "properties": {
+          "ipConfigurations": [
+            {
+              "name": "ipconfig1",
+              "properties": {
+                "privateIPAllocationMethod": "Static",
+                "privateIPAddress": "172.16.1.40",
+                "subnet": {
+                  "id": "[variables('RDSWebAccessSubnetRef')]"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "[parameters('RDSWebAccessName')]",
+        "type": "Microsoft.Compute/virtualMachines",
+        "location": "[parameters('Location')]",
+        "apiVersion": "2015-06-15",
+        "dependsOn": [
+          "[concat('Microsoft.Network/networkInterfaces/', variables('RDSWebAccessNicName'))]"
+        ],
+        "tags": {
+          "displayName": "WebAccess"
+        },
+        "properties": {
+          "hardwareProfile": {
+            "vmSize": "[parameters('RDSWebAccessSize')]"
+          },
+          "osProfile": {
+            "computerName": "[parameters('RDSWebAccessName')]",
+            "adminUsername": "[parameters('AdminUsername')]",
+            "adminPassword": "[parameters('AdminPassword')]"
+          },
+          "storageProfile": {
+            "imageReference": {
+              "publisher": "[variables('RDSWebAccessImagePublisher')]",
+              "offer": "[variables('RDSWebAccessImageOffer')]",
+              "sku": "[parameters('RDSWebAccessWindowsOSVersion')]",
+              "version": "latest"
+            },
+            "osDisk": {
+              "name": "[variables('RDSWebAccessOSDiskName')]",
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('RDSWebAccessStorageAccountContainerName'), '/', variables('RDSWebAccessOSDiskName'), '.vhd')]"
+              },
+              "caching": "ReadWrite",
+              "createOption": "FromImage"
+            }
+          },
+          "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('RDSWebAccessNicName'))]"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "outputs": {
+    }
+}
