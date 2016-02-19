@@ -298,6 +298,38 @@
         }
       }
     },
+    {
+      "name": "CreateSQL",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createDC')]",
+        "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('AssetLocation'),'/Templates/createSQL.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "Location": { "value": "[parameters('Location')]" },
+          "PremiumStorageAccountName": { "value": "[variables('PremiumStorageAccountName')]" },
+          "StandardStorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
+          "Vnetname": { "value": "[variables('VNetname')]" },
+          "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
+          "SQLName": { "value": "[variables('SQL01Name')]" },
+          "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
+          "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
+          "DomainName": { "value": "[parameters('Windows Domain name')]" },
+          "Edition": { "value": "[parameters('Edition')]" },
+          "SQLSize": { "value": "[parameters('SQLSize')]" },
+          "SQLIPAddress": { "value": "[variables('SQL01IPAddress')]" },
+          "AssetLocation": { "value": "[variables('AssetLocation')]" }
+        }
+      }
+    },
+
 
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -334,12 +366,25 @@
           ]
         }
       }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('SQL01Name'),'/BGInfo')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createSQL')]"
+      ],
+      "location": "[parameters('Location')]",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "BGInfo",
+        "typeHandlerVersion": "2.1",
+        "settings": {
+          "Properties": [
+          ]
+        }
+      }
     }
-
-
-
-
-
 
   ],
   "outputs": {
