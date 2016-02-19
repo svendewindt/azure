@@ -128,7 +128,40 @@
       "metadata": {
         "description": "Size of the SQL server. (Op premium storage)"
       }
+    },
+    "RDSWebAccessWindowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2012-R2-Datacenter",
+        "Windows-Server-Technical-Preview"
+      ],
+      "metadata": {
+        "description": "Windows version for the RDS server."
+      }
+    },
+    "RDSWebAccessSize": {
+      "type": "string",
+      "defaultValue": "Standard_D1_v2",
+      "allowedValues": [
+        "Standard_A1",
+        "Standard_A2",
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2"
+      ],
+      "metadata": {
+        "description": "Size of the RDS WebAccess."
+      }
     }
+
   },
   "variables": {
     "StandardStorageAccountName": "[tolower(concat(parameters('Project Name'),'standard'))]",
@@ -149,6 +182,8 @@
     "RDS01IPAddress": "172.16.1.20",
     "SQL01Name": "[concat(parameters('Project Name'), 'SQL01')]",
     "SQL01IPAddress": "172.16.1.30",
+    "RDSWebAccessName": "[concat(parameters('Project Name'), 'RDSWebAccess01')]",
+    "RDSWebAccessIPAddress": "172.16.1.40",
     "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall",
     "WMFVersion": "5.0"
 
@@ -349,12 +384,13 @@
           "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
           "Vnetname": { "value": "[variables('VNetname')]" },
           "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
-          "RDSWebAccessName": { "value": "[variables('SQL01Name')]" },
+          "RDSWebAccessName": { "value": "[variables('RDSWebAccessName')]" },
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
-          "RDSWewAccessSize": { "value": "[parameters('SQLSize')]" },
-          "RDSWewAccessIPAddress": { "value": "[variables('SQL01IPAddress')]" },
+          "RDSWebAccessWindowsOSVersion": {"value": "[parameters('RDSWebAccessWindowsOSVersion')]"},
+          "RDSWebAccessSize": { "value": "[parameters('RDSWebAccessSize')]" },
+          "RDSWebAccessIPAddress": { "value": "[variables('RDSWebAccessIPAddress')]" },
           "AssetLocation": { "value": "[variables('AssetLocation')]" }
         }
       }
