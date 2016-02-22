@@ -37,8 +37,8 @@
     "RDSWebAccessPIPDnsName": "[tolower(parameters('RDSWebAccessName'))]",
     "installARDSWebAccessonfigurationFunction": "installARDSWebAccessonfiguration.ps1\\Main",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureRDSWA.ps1.zip')]",
-    "configurationFunction": "configureRDSWA.ps1\\configureRDSWA"
-  },
+    "configurationFunction": "configureRDSWA.ps1\\configureRDSWA",
+   },
   "resources": [
     {
       "name": "[variables('RDSWebAccessNicName')]",
@@ -110,7 +110,35 @@
             }
           ]
         }
-      }
+      },
+        "resources": [
+            {
+                "name": "configureRDSWA",
+                "type": "extensions",
+                "location": "[parameters('Location')]",
+                "apiVersion": "2015-06-15",
+                "dependsOn": [
+                    "[concat('Microsoft.Compute/virtualMachines/', parameters('RDSWebAccessName'))]"
+                ],
+                "tags": {
+                    "displayName": "configureRDSWA"
+                },
+                "properties": {
+                    "publisher": "Microsoft.Powershell",
+                    "type": "DSC",
+                    "typeHandlerVersion": "2.9",
+                    "autoUpgradeMinorVersion": true,
+                  "settings": {
+                    "modulesUrl": "[variables('modulesUrl')]",
+                    "configurationFunction": "[variables('configurationFunction')]",
+                    "properties": {
+                      "nodeName": "[parameters('RDSWebAccessName')]"
+                    }
+                  },
+                    "protectedSettings": { }
+                }
+            }
+        ]
     },
     {
       "name": "[variables('RDSWebAccessPIPName')]",
@@ -150,21 +178,7 @@
           "Password": "[parameters('AdminPassword')]"
         }
       }
-    },
-      {
-          "name": "configureRDSWA",
-          "type": "Microsoft.Resources/deployments",
-          "apiVersion": "2015-01-01",
-          "dependsOn": [ ],
-          "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                  "uri": "[concat(parameters('_artifactsLocation'), '/', parameters('configureRDSWATemplateFolder'), '/', parameters('configureRDSWATemplateFileName'), parameters('_artifactsLocationSasToken'))]",
-                  "contentVersion": "1.0.0.0"
-              },
-              "parameters": { }
-          }
-      }
+    }
 
   ],
     "outputs": {
