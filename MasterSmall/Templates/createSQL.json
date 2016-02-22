@@ -43,8 +43,8 @@
     "SQLNicName": "[concat(parameters('SQLName'), 'NetworkInterface')]",
     "SQLPIPName": "[concat(parameters('SQLName'), 'PublicIP')]",
     "SQLPIPDnsName": "[tolower(parameters('SQLName'))]",
-    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureSQLDisks.ps1.zip')]",
-    "configurationFunction": "configureSQLDisks.ps1\\setDisks"
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureSQL.ps1.zip')]",
+    "configurationFunction": "configureSQL.ps1\\configureSQL"
 
   },
   "resources": [
@@ -153,7 +153,7 @@
       "resources": [
 
         {
-          "name": "configureDisks",
+          "name": "configureSQL",
           "type": "extensions",
           "location": "[parameters('Location')]",
           "apiVersion": "2015-06-15",
@@ -161,7 +161,7 @@
             "[concat('Microsoft.Compute/virtualMachines/', parameters('SQLName'))]"
           ],
           "tags": {
-            "displayName": "configureDisks"
+            "displayName": "configureSQL"
           },
           "properties": {
             "publisher": "Microsoft.Powershell",
