@@ -46,7 +46,7 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses', variables('RDSWebAccessPIPName'))]"
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('RDSWebAccessPIPName'))]"
       ],
       "tags": {
         "displayName": "[variables('RDSWebAccessNicName')]"
