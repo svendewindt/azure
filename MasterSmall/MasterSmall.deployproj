@@ -37,7 +37,6 @@
     <Content Include="Templates\azuredeploy.parameters.json" />
     <None Include="DSC\configureRDS.ps1.zip" />
     <None Include="DSC\configureRDSWA.ps1.zip" />
-    <Content Include="DSC\configureRDSWAConfiguration.ps1" />
     <None Include="DSC\configureSQL.ps1.zip" />
     <None Include="DSC\configureDC.ps1.zip" />
     <None Include="Templates\createDC.json" />
