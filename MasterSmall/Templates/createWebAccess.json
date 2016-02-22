@@ -39,78 +39,95 @@
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installAD.ps1.zip')]",
     "configurationFunction": "installAD.ps1\\installAD"
   },
-    "resources": [
-      {
-        "name": "[variables('RDSWebAccessNicName')]",
-        "type": "Microsoft.Network/networkInterfaces",
-        "location": "[parameters('Location')]",
-        "apiVersion": "2015-06-15",
-        "dependsOn": [
-        ],
-        "tags": {
-          "displayName": "[variables('RDSWebAccessNicName')]"
-        },
-        "properties": {
-          "ipConfigurations": [
-            {
-              "name": "ipconfig1",
-              "properties": {
-                "privateIPAllocationMethod": "Static",
-                "privateIPAddress": "172.16.1.40",
-                "subnet": {
-                  "id": "[variables('RDSWebAccessSubnetRef')]"
-                }
+  "resources": [
+    {
+      "name": "[variables('RDSWebAccessNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+      ],
+      "tags": {
+        "displayName": "[variables('RDSWebAccessNicName')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "172.16.1.40",
+              "subnet": {
+                "id": "[variables('RDSWebAccessSubnetRef')]"
               }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('RDSWebAccessName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('RDSWebAccessNicName'))]"
+      ],
+      "tags": {
+        "displayName": "WebAccess"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('RDSWebAccessSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('RDSWebAccessName')]",
+          "adminUsername": "[parameters('AdminUsername')]",
+          "adminPassword": "[parameters('AdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('RDSWebAccessImagePublisher')]",
+            "offer": "[variables('RDSWebAccessImageOffer')]",
+            "sku": "[parameters('RDSWebAccessWindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "[variables('RDSWebAccessOSDiskName')]",
+            "vhd": {
+              "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('RDSWebAccessStorageAccountContainerName'), '/', variables('RDSWebAccessOSDiskName'), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('RDSWebAccessNicName'))]"
             }
           ]
         }
+      }
+    },
+    {
+      "name": "[variables('RDSWebAccessPIPName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "[variables('RDSWebAccessPIPName')]"
       },
-      {
-        "name": "[parameters('RDSWebAccessName')]",
-        "type": "Microsoft.Compute/virtualMachines",
-        "location": "[parameters('Location')]",
-        "apiVersion": "2015-06-15",
-        "dependsOn": [
-          "[concat('Microsoft.Network/networkInterfaces/', variables('RDSWebAccessNicName'))]"
-        ],
-        "tags": {
-          "displayName": "WebAccess"
-        },
-        "properties": {
-          "hardwareProfile": {
-            "vmSize": "[parameters('RDSWebAccessSize')]"
-          },
-          "osProfile": {
-            "computerName": "[parameters('RDSWebAccessName')]",
-            "adminUsername": "[parameters('AdminUsername')]",
-            "adminPassword": "[parameters('AdminPassword')]"
-          },
-          "storageProfile": {
-            "imageReference": {
-              "publisher": "[variables('RDSWebAccessImagePublisher')]",
-              "offer": "[variables('RDSWebAccessImageOffer')]",
-              "sku": "[parameters('RDSWebAccessWindowsOSVersion')]",
-              "version": "latest"
-            },
-            "osDisk": {
-              "name": "[variables('RDSWebAccessOSDiskName')]",
-              "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('RDSWebAccessStorageAccountContainerName'), '/', variables('RDSWebAccessOSDiskName'), '.vhd')]"
-              },
-              "caching": "ReadWrite",
-              "createOption": "FromImage"
-            }
-          },
-          "networkProfile": {
-            "networkInterfaces": [
-              {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('RDSWebAccessNicName'))]"
-              }
-            ]
-          }
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('RDSWebAccessPIPDnsName')]"
         }
       }
-    ],
+    }
+
+  ],
     "outputs": {
     }
 }
