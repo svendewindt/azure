@@ -309,6 +309,7 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Resources/deployments/','createDC')]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('StandardStorageAccountName'))]",
         "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]"
       ],
       "properties": {
@@ -339,7 +340,9 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Resources/deployments/','createDC')]",
-        "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]"
+        "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('StandardStorageAccountName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('PremiumStorageAccountName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -371,7 +374,8 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Resources/deployments/','createDC')]",
-        "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]"
+        "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('StandardStorageAccountName'))]"
       ],
       "properties": {
         "mode": "Incremental",
