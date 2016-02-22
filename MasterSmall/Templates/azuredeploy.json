@@ -6,7 +6,7 @@
       "type": "string",
       "defaultValue": "Cust1",
       "minLength": 1,
-      "maxLength": 10,
+      "maxLength": 8,
       "metadata": {
         "description": "Name for the project. This will be used to name other resources."
       }
