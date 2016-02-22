@@ -46,6 +46,7 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses', variables('RDSWebAccessPIPName'))]"
       ],
       "tags": {
         "displayName": "[variables('RDSWebAccessNicName')]"
@@ -59,7 +60,8 @@
               "privateIPAddress": "172.16.1.40",
               "subnet": {
                 "id": "[variables('RDSWebAccessSubnetRef')]"
-              }
+              },
+              "publicIPAddress": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('RDSWebAccessPIPName'))]" }
             }
           }
         ]
