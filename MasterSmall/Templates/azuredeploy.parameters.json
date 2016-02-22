@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "BMThuis3"
+            "value": "BMThuis"
         },
         "Windows Domain name": {
             "value": "sven.local"
@@ -12,13 +12,13 @@
             "value": "Enter123"
         },
         "DCSize": {
-            "value": "Standard_D1_v2"
+            "value": "Standard_D2_v2"
         },
         "DCWindowsOSVersion": {
             "value": "2012-R2-Datacenter"
         },
         "RDSSize": {
-            "value": "Standard_D1_v2"
+            "value": "Standard_D3_v2"
         },
         "SQLSize": {
             "value": "Standard_DS2"

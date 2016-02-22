@@ -142,7 +142,11 @@
                       }
                     }
                   },
-                    "protectedSettings": { }
+                  "protectedSettings": {
+                    "items": {
+                      "adminPassword": "[parameters('AdminPassword')]"
+                    }
+                  }
                 }
             }
         ]
