@@ -36,8 +36,8 @@
     "RDSPIPName": "[concat(parameters('RDSName'), 'PublicIP')]",
     "RDSPIPDnsName": "[tolower(parameters('RDSName'))]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
-    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installAD.ps1.zip')]",
-    "configurationFunction": "installAD.ps1\\installAD"
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureRDS.ps1.zip')]",
+    "configureRDSConfigurationFunction": "configureRDS.ps1\\configureRDS"
   },
   "resources": [
     {
@@ -112,7 +112,35 @@
             }
           ]
         }
-      }
+      },
+        "resources": [
+            {
+                "name": "configureRDS",
+                "type": "extensions",
+                "location": "[parameters('Location')]",
+                "apiVersion": "2015-06-15",
+                "dependsOn": [
+                    "[concat('Microsoft.Compute/virtualMachines/', parameters('RDSName'))]"
+                ],
+                "tags": {
+                    "displayName": "configureRDS"
+                },
+                "properties": {
+                    "publisher": "Microsoft.Powershell",
+                    "type": "DSC",
+                    "typeHandlerVersion": "2.9",
+                    "autoUpgradeMinorVersion": true,
+                  "settings": {
+                    "modulesUrl": "[variables('modulesUrl')]",
+                    "configurationFunction": "[variables('configureRDSConfigurationFunction')]",
+                    "properties": {
+                      "nodeName": "[parameters('RDSName')]"
+                    }
+                  },
+                    "protectedSettings": { }
+                }
+            }
+        ]
     },
     {
       "apiVersion": "2015-06-15",
