@@ -173,37 +173,23 @@
               "modulesUrl": "[variables('modulesUrl')]",
               "configurationFunction": "[variables('ConfigurationFunction')]",
               "properties": {
-                "nodeName": "[parameters('SQLName')]"
+                "nodeName": "localhost",
+                "domainName": "[parameters('DomainName')]",
+                "adminCreds": {
+                  "userName": "[parameters('AdminUserName')]",
+                  "password": "PrivateSettingsRef:AdminPassword"
+                }
               }
             },
-            "protectedSettings": { }
+            "protectedSettings": {
+              "items": {
+                "adminPassword": "[parameters('AdminPassword')]"
+              }
+            }
           }
         }
 
       ]
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('SQLName'),'/JoinDomain')]",
-      "location": "[parameters('Location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('SQLName'))]"
-      ],
-      "properties": {
-        "publisher": "Microsoft.Compute",
-        "type": "JsonADDomainExtension",
-        "typeHandlerVersion": "1.0",
-        "settings": {
-          "Name": "[parameters('DomainName')]",
-          "User": "[concat(parameters('DomainName'), '\\', parameters('AdminUserName'))]",
-          "Restart": "true",
-          "Options": "3"
-        },
-        "protectedsettings": {
-          "Password": "[parameters('AdminPassword')]"
-        }
-      }
     },
     {
       "name": "[variables('SQLPIPName')]",
