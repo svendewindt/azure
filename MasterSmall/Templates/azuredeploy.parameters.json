@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "BM2"
+            "value": "BM3"
         },
         "Windows Domain name": {
             "value": "sven.local"
@@ -21,7 +21,10 @@
             "value": "Standard_D2_v2"
         },
         "SQLSize": {
-            "value": "Standard_DS2"
+            "value": "Standard_DS3"
+        },
+        "RDSWebAccessSize": {
+            "value": "Standard_D2_v2"
         }
        
        
