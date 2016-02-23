@@ -113,43 +113,32 @@
           ]
         }
       },
-        "resources": [
-            {
-                "name": "configureRDS",
-                "type": "extensions",
-                "location": "[parameters('Location')]",
-                "apiVersion": "2015-06-15",
-                "dependsOn": [
-                    "[concat('Microsoft.Compute/virtualMachines/', parameters('RDSName'))]"
-                ],
-                "tags": {
-                    "displayName": "configureRDS"
-                },
-                "properties": {
-                    "publisher": "Microsoft.Powershell",
-                    "type": "DSC",
-                    "typeHandlerVersion": "2.9",
-                    "autoUpgradeMinorVersion": true,
-                  "settings": {
-                    "modulesUrl": "[variables('modulesUrl')]",
-                    "configurationFunction": "[variables('configureRDSConfigurationFunction')]",
-                    "properties": {
-                      "nodeName": "localhost",
-                      "domainName": "[parameters('DomainName')]",
-                      "adminCreds": {
-                        "userName": "[parameters('AdminUserName')]",
-                        "password": "PrivateSettingsRef:AdminPassword"
-                      }
-                    }
-                  },
-                  "protectedSettings": {
-                    "items": {
-                      "adminPassword": "[parameters('AdminPassword')]"
-                    }
-                  }
-                }
-            }
-        ]
+      "resources": [
+        
+      ]
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('RDSName'),'/JoinDomain')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('RDSName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "JsonADDomainExtension",
+        "typeHandlerVersion": "1.0",
+        "settings": {
+          "Name": "[parameters('DomainName')]",
+          "User": "[concat(parameters('DomainName'), '\\', parameters('AdminUserName'))]",
+          "Restart": "true",
+          "Options": "3"
+        },
+        "protectedsettings": {
+          "Password": "[parameters('AdminPassword')]"
+        }
+      }
     },
     {
       "name": "[variables('RDSPIPName')]",
