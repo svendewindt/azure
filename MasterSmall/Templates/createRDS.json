@@ -134,7 +134,7 @@
                     "modulesUrl": "[variables('modulesUrl')]",
                     "configurationFunction": "[variables('configureRDSConfigurationFunction')]",
                     "properties": {
-                      "nodeName": "[parameters('RDSName')]",
+                      "nodeName": "localhost",
                       "domainName": "[parameters('DomainName')]",
                       "adminCreds": {
                         "userName": "[parameters('AdminUserName')]",
