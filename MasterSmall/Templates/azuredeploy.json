@@ -479,7 +479,10 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', variables('DC01Name'), '/extensions/', 'configureDC')]"
+        "[concat('Microsoft.Compute/virtualMachines/', variables('DC01Name'), '/extensions/', 'configureDC')]",
+        "[concat('Microsoft.Resources/deployments/','createDC')]",
+        "[concat('Microsoft.Resources/deployments/','createRDS')]",
+        "[concat('Microsoft.Resources/deployments/','CreateRDSWebAccess')]"
       ],
       "tags": {
         "displayName": "startOrchestration"
