@@ -43,7 +43,7 @@
     "configurationFunction": "configureDC.ps1\\configureDC",
     "customScriptUrl": "[concat(parameters('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
     "customScriptName": "startOrchestration.ps1",
-    "customScriptParameters": " -WindowsFeature Telnet-Client"
+    "customScriptParameters": " -WindowsFeature wins"
   },
   "resources": [
     {
