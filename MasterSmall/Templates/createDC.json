@@ -39,10 +39,17 @@
     "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]",
     "DCPIPName": "[concat(parameters('DCName'), 'PublicIP')]",
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
+    "DCAvailabilitySetName": "[concat(parameters('DCName'), 'AvailabilitySetName')]",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureDC.ps1.zip')]",
-    "configurationFunction": "configureDC.ps1\\configureDC",
+    "configurationFunction": "configureDC.ps1\\configureDC"
   },
   "resources": [
+    {
+      "name": "[variables('DCAvailabilitySetName')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "location": "[parameters('location')]",
+      "apiVersion": "2015-06-15"
+    },
     {
       "name": "[variables('DCNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
@@ -79,12 +86,18 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('DCNicName'))]"
+        "[concat('Microsoft.Network/networkInterfaces/', variables('DCNicName'))]",
+        "[concat('Microsoft.Compute/availabilitySets', variables('DCAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "DC"
       },
+
       "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('DCAvailabilitySetName'))]"
+        },
+          
         "hardwareProfile": {
           "vmSize": "[variables('DCVmSize')]"
         },
@@ -173,6 +186,7 @@
         }
       }
     }
+
   ],
   "outputs": {
   }

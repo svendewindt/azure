@@ -479,7 +479,6 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        
         "[concat('Microsoft.Resources/deployments/','createDC')]",
         "[concat('Microsoft.Resources/deployments/','createRDS')]",
         "[concat('Microsoft.Resources/deployments/','CreateRDSWebAccess')]"
