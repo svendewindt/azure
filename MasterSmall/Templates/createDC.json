@@ -43,7 +43,7 @@
     "configurationFunction": "configureDC.ps1\\configureDC",
     "customScriptUrl": "[concat(parameters('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
     "customScriptName": "startOrchestration.ps1",
-    "customScriptParameters": " -WindowsFeature Wins"
+    "customScriptParameters": " -WindowsFeature Telnet-Client"
   },
   "resources": [
     {
@@ -156,33 +156,36 @@
 
             }
           }
-        },
-        {
-          "name": "startOrchestration",
-          "type": "extensions",
-          "location": "[parameters('Location')]",
-          "apiVersion": "2015-06-15",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', parameters('DCName'))]"
-          ],
-          "tags": {
-            "displayName": "startOrchestration"
-          },
-          "properties": {
-            "publisher": "Microsoft.Compute",
-            "type": "CustomScriptExtension",
-            "typeHandlerVersion": "1.4",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-              "fileUris": [
-                "[variables('customScriptUrl')]"
-              ],
-              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('customScriptName'), variables('customScriptParameters'))]"
-            }
-          }
         }
+
       ]
     },
+
+    {
+      "name": "[concat(parameters('DCName'),'/startOrchestration')]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('DCName'))]"
+      ],
+      "tags": {
+        "displayName": "startOrchestration"
+      },
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.4",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[variables('customScriptUrl')]"
+          ],
+          "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('customScriptName'), variables('customScriptParameters'))]"
+        }
+      }
+    },
+
     {
       "name": "[variables('DCPIPName')]",
       "type": "Microsoft.Network/publicIPAddresses",
@@ -195,7 +198,7 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-          "domainNameLabel": "[variables('DCPIPDnsName')]",
+          "domainNameLabel": "[variables('DCPIPDnsName')]"
         }
       }
     }

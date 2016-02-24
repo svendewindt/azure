@@ -42,6 +42,7 @@
     <None Include="Templates\createRDS.json" />
     <None Include="Templates\createSQL.json" />
     <None Include="Templates\createWebAccess.json" />
+    <None Include="Templates\test.json" />
     <None Include="Templates\updateVNetDNS.json" />
   </ItemGroup>
   <ItemGroup>
