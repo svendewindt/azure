@@ -54,17 +54,18 @@ param(
     write-log -line "FQDN WebAccess  : $($fqdnRDSWebAccess)"
     write-log -line "FQDN RDS        : $($fqdnRDSHost)"
 
-
+    write-log -title "Sleeping for 5 minutes to let all servers boot..."
+    Start-Sleep -Seconds 300
     
-    write-log -title "lineSetting up SessionDeploymentline"
+    write-log -title "Setting up SessionDeployment"
     $output = New-RDSessionDeployment -ConnectionBroker $fqdnRDSBroker -WebAccessServer $fqdnRDSWebAccess -SessionHost $fqdnRDSHost 2>&1
     write-log -line $output
 
-    write-log -title "lineAdding License serverline"
+    write-log -title "Adding License server"
     $output = Add-RDServer -Server $fqdnRDSBroker -Role RDS-LICENSING -ConnectionBroker $fqdnRDSBroker 2>&1
     write-log -line $output
 
-    write-log -title "lineConfiguring Licensing mode per userline"
+    write-log -title "Configuring Licensing mode per user"
     $output = Set-RDLicenseConfiguration -LicenseServer $fqdnRDSBroker -Mode PerUser -ConnectionBroker $fqdnRDSBroker -Force 2>&1
     write-log -line $output
 
