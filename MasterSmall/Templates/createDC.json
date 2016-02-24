@@ -87,7 +87,7 @@
       "apiVersion": "2015-06-15",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('DCNicName'))]",
-        "[concat('Microsoft.Compute/availabilitySets', variables('DCAvailabilitySetName'))]"
+        "[concat('Microsoft.Compute/availabilitySets/', variables('DCAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "DC"
