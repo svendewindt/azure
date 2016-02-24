@@ -40,7 +40,9 @@
     "DCPIPName": "[concat(parameters('DCName'), 'PublicIP')]",
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureDC.ps1.zip')]",
-    "configurationFunction": "configureDC.ps1\\configureDC"
+    "configurationFunction": "configureDC.ps1\\configureDC",
+    "customScriptUrl": "[concat(parameters('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
+      "customScriptName": "startOrchestration.ps1"
   },
   "resources": [
     {
@@ -151,6 +153,30 @@
                 "adminPassword": "[parameters('AdminPassword')]"
               }
 
+            }
+          }
+        },
+        {
+          "name": "startOrchestration",
+          "type": "extensions",
+          "location": "[parameters('Location')]",
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('DCName'))]"
+          ],
+          "tags": {
+            "displayName": "startOrchestration"
+          },
+          "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "CustomScriptExtension",
+            "typeHandlerVersion": "1.4",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": [
+                "[variables('customScriptUrl')]"
+              ],
+              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('customScriptName'))]"
             }
           }
         }
