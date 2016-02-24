@@ -1,2 +1,6 @@
 <# Custom Script for Windows #>
-install-windowsfeature wins
+param(
+    [parameter(mandatory)][String]$WindowsFeature
+)
+
+install-windowsfeature $WindowsFeature

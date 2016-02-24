@@ -42,7 +42,8 @@
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureDC.ps1.zip')]",
     "configurationFunction": "configureDC.ps1\\configureDC",
     "customScriptUrl": "[concat(parameters('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
-      "customScriptName": "startOrchestration.ps1"
+    "customScriptName": "startOrchestration.ps1",
+    "customScriptParameters": " -WindowsFeature Wins"
   },
   "resources": [
     {
@@ -176,7 +177,7 @@
               "fileUris": [
                 "[variables('customScriptUrl')]"
               ],
-              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('customScriptName'))]"
+              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('customScriptName'), variables('customScriptParameters'))]"
             }
           }
         }
