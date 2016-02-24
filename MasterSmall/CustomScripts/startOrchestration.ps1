@@ -48,7 +48,7 @@ param(
     $fqdnRDSHost = [System.Net.Dns]::GetHostByName($RDSHost).hostname
 
     write-log -title "Starting Orchestration"
-    write-log -line "titleariables used:"
+    write-log -line "Variables used:"
 
     write-log -line "FQDN Broker     : $($fqdnRDSBroker)"
     write-log -line "FQDN WebAccess  : $($fqdnRDSWebAccess)"
