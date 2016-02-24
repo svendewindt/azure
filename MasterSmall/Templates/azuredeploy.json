@@ -182,10 +182,13 @@
     "RDS01IPAddress": "172.16.1.20",
     "SQL01Name": "[concat(parameters('Project Name'), 'SQL01')]",
     "SQL01IPAddress": "172.16.1.30",
-    "RDSWebAccessName": "[concat(parameters('Project Name'), 'RDSWA01')]",
-    "RDSWebAccessIPAddress": "172.16.1.40",
+    "RDSWebAccess01Name": "[concat(parameters('Project Name'), 'RDSWA01')]",
+    "RDSWebAccess01IPAddress": "172.16.1.40",
     "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall",
-    "WMFVersion": "5.0"
+    "WMFVersion": "5.0",
+    "customScriptUrl": "[concat(variables('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
+    "customScriptName": "startOrchestration.ps1",
+    "customScriptParameters": "[concat(' -RDSBroker ', variables('DC01Name'), ' -RDSWebAccess ', variables('RDSWebAccess01Name'), ' -RDSHost ', variables('RDS01Name'))]"
 
   },
   "resources": [
@@ -387,13 +390,13 @@
           "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
           "Vnetname": { "value": "[variables('VNetname')]" },
           "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
-          "RDSWebAccessName": { "value": "[variables('RDSWebAccessName')]" },
+          "RDSWebAccessName": { "value": "[variables('RDSWebAccess01Name')]" },
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
           "RDSWebAccessWindowsOSVersion": { "value": "[parameters('RDSWebAccessWindowsOSVersion')]" },
           "RDSWebAccessSize": { "value": "[parameters('RDSWebAccessSize')]" },
-          "RDSWebAccessIPAddress": { "value": "[variables('RDSWebAccessIPAddress')]" },
+          "RDSWebAccessIPAddress": { "value": "[variables('RDSWebAccess01IPAddress')]" },
           "AssetLocation": { "value": "[variables('AssetLocation')]" }
         }
       }
@@ -454,7 +457,7 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(variables('RDSWebAccessName'),'/BGInfo')]",
+      "name": "[concat(variables('RDSWebAccess01Name'),'/BGInfo')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
         "[concat('Microsoft.Resources/deployments/','CreateRDSWebAccess')]"
@@ -467,6 +470,30 @@
         "settings": {
           "Properties": [
           ]
+        }
+      }
+    },
+    {
+      "name": "[concat(variables('DC01Name'),'/startOrchestration')]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('DC01Name'), '/extensions/', 'configureDC')]"
+      ],
+      "tags": {
+        "displayName": "startOrchestration"
+      },
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.4",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[variables('customScriptUrl')]"
+          ],
+          "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('customScriptName'), variables('customScriptParameters'))]"
         }
       }
     }
