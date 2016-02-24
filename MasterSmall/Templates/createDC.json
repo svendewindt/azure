@@ -166,8 +166,7 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('DCName'))]",
-        "[concat('Microsoft.Compute/virtualMachines/extensions/', 'configureDC')]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('DCName'))]"
       ],
       "tags": {
         "displayName": "startOrchestration"
