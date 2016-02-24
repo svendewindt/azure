@@ -166,7 +166,7 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('DCName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('DCName'),'/extensions/Microsoft.Powershell.DSC')]"
       ],
       "tags": {
         "displayName": "startOrchestration"
