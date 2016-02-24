@@ -39,7 +39,7 @@
     "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]",
     "DCPIPName": "[concat(parameters('DCName'), 'PublicIP')]",
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
-    "DCAvailabilitySetName": "[concat(parameters('DCName'), 'AvailabilitySetName')]",
+    "DCAvailabilitySetName": "[concat(parameters('DCName'), 'AvailabilitySet')]",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureDC.ps1.zip')]",
     "configurationFunction": "configureDC.ps1\\configureDC"
   },

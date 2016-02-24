@@ -35,11 +35,18 @@
     "RDSNicName": "[concat(parameters('RDSName'), 'NetworkInterface')]",
     "RDSPIPName": "[concat(parameters('RDSName'), 'PublicIP')]",
     "RDSPIPDnsName": "[tolower(parameters('RDSName'))]",
+    "RDSAvailabilitySetName": "[concat(parameters('RDSName'), 'AvailabilitySet')]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureRDS.ps1.zip')]",
     "configureRDSConfigurationFunction": "configureRDS.ps1\\configureRDS"
   },
   "resources": [
+    {
+      "name": "[variables('RDSAvailabilitySetName')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "location": "[parameters('location')]",
+      "apiVersion": "2015-06-15"
+    },
     {
       "name": "[variables('RDSNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
@@ -81,6 +88,9 @@
         "displayName": "[parameters('RDSName')]"
       },
       "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('RDSAvailabilitySetName'))]"
+        },
         "hardwareProfile": {
           "vmSize": "[variables('RDSVmSize')]"
         },
@@ -114,7 +124,7 @@
         }
       },
       "resources": [
-        
+
       ]
     },
     {
