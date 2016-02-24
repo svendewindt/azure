@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "vers1"
+            "value": "bmt1"
         },
         "Windows Domain name": {
             "value": "sven.local"
