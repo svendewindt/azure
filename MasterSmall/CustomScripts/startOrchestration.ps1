@@ -93,7 +93,7 @@ function tryPsRemoting{
     $userName = [Environment]::UserName
     $domainName = [Environment]::UserDomainName
     $machineName = [Environment]::MachineName
-    write-log -line "Domainname\username : $($domainName)\\$($userName)" 
+    write-log -line "Domainname\username : $($domainName)\$($userName)" 
     write-log -line "MachineName         : $($machineName)" 
 	write-log -line "ScriptRoot          : $($PSScriptRoot)"
 
