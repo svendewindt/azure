@@ -87,9 +87,14 @@ function tryPsRemoting{
     write-log -title "Starting Orchestration"
     write-log -line "Variables used:"
 
-    write-log -line "FQDN Broker     : $($fqdnRDSBroker)"
-    write-log -line "FQDN WebAccess  : $($fqdnRDSWebAccess)"
-    write-log -line "FQDN RDS        : $($fqdnRDSHost)"
+    write-log -line "FQDN Broker         : $($fqdnRDSBroker)"
+    write-log -line "FQDN WebAccess      : $($fqdnRDSWebAccess)"
+    write-log -line "FQDN RDS            : $($fqdnRDSHost)"
+    $userName = [Environment]::UserName
+    $domainName = [Environment]::UserDomainName
+    $machineName = [Environment]::MachineName
+    write-log -line "Domainname\username : $($domainName)\\$($userName)" 
+    write-log -line "MachineName         : $($machineName)" 
 
     #write-log -title "Sleeping for 5 minutes to let all servers boot..."
     #Start-Sleep -Seconds 300
