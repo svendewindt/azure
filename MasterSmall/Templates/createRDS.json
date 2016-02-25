@@ -82,7 +82,8 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('RDSNicName'))]"
+        "[concat('Microsoft.Network/networkInterfaces/', variables('RDSNicName'))]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('RDSAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "[parameters('RDSName')]"

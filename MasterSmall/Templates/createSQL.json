@@ -90,7 +90,8 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('SQLNicName'))]"
+        "[concat('Microsoft.Network/networkInterfaces/', variables('SQLNicName'))]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('SQLAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "[parameters('SQLName')]"

@@ -80,7 +80,8 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('RDSWebAccessNicName'))]"
+        "[concat('Microsoft.Network/networkInterfaces/', variables('RDSWebAccessNicName'))]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('RDSWebAccessAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "WebAccess"
