@@ -95,6 +95,7 @@ function tryPsRemoting{
     $machineName = [Environment]::MachineName
     write-log -line "Domainname\username : $($domainName)\\$($userName)" 
     write-log -line "MachineName         : $($machineName)" 
+	write-log -line "ScriptRoot          : $($PSScriptRoot)"
 
     #write-log -title "Sleeping for 5 minutes to let all servers boot..."
     #Start-Sleep -Seconds 300
