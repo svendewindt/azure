@@ -30,6 +30,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CustomScripts\startOrchestration.ps1" />
+    <None Include="CustomScripts\DeployRDS.ps1" />
+    <None Include="CustomScripts\Logging.psm1" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>
     </None>
