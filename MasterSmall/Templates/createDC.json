@@ -22,7 +22,11 @@
       "type": "string",
       "minLength": 4
     },
-    "AssetLocation": { "type": "string" }
+    "AssetLocation": { "type": "string" },
+    "WMFversion": {
+      "type": "string",
+        "defaultValue": "5.0"
+    }
   },
   "variables": {
     "DCImagePublisher": "MicrosoftWindowsServer",
@@ -35,11 +39,17 @@
     "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]",
     "DCPIPName": "[concat(parameters('DCName'), 'PublicIP')]",
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
-    "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
-    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/installAD.ps1.zip')]",
-    "configurationFunction": "installAD.ps1\\installAD"
+    "DCAvailabilitySetName": "[concat(parameters('DCName'), 'AvailabilitySet')]",
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureDC.ps1.zip')]",
+    "configurationFunction": "configureDC.ps1\\configureDC"
   },
   "resources": [
+    {
+      "name": "[variables('DCAvailabilitySetName')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "location": "[parameters('location')]",
+      "apiVersion": "2015-06-15"
+    },
     {
       "name": "[variables('DCNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
@@ -76,12 +86,18 @@
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('DCNicName'))]"
+        "[concat('Microsoft.Network/networkInterfaces/', variables('DCNicName'))]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('DCAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "DC"
       },
+
       "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('DCAvailabilitySetName'))]"
+        },
+          
         "hardwareProfile": {
           "vmSize": "[variables('DCVmSize')]"
         },
@@ -116,7 +132,7 @@
       },
       "resources": [
         {
-          "name": "InstallAD",
+          "name": "configureDC",
           "type": "extensions",
           "location": "[parameters('Location')]",
           "apiVersion": "2015-06-15",
@@ -124,7 +140,7 @@
             "[concat('Microsoft.Compute/virtualMachines/',parameters('DCName'))]"
           ],
           "tags": {
-            "displayName": "InstallAD"
+            "displayName": "configureDC"
           },
           "properties": {
             "publisher": "Microsoft.Powershell",
@@ -132,7 +148,7 @@
             "typeHandlerVersion": "2.9",
             "autoUpgradeMinorVersion": true,
             "settings": {
-              "wmfVersion": "5.0",
+              "wmfVersion": "[parameters('WMFversion')]",
               "modulesUrl": "[variables('modulesUrl')]",
               "configurationFunction": "[variables('configurationFunction')]",
               "properties": {
@@ -147,12 +163,13 @@
               "items": {
                 "adminPassword": "[parameters('AdminPassword')]"
               }
-
             }
           }
         }
+
       ]
     },
+
     {
       "name": "[variables('DCPIPName')]",
       "type": "Microsoft.Network/publicIPAddresses",
@@ -165,10 +182,11 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-          "domainNameLabel": "[variables('DCPIPDnsName')]",
+          "domainNameLabel": "[variables('DCPIPDnsName')]"
         }
       }
     }
+
   ],
   "outputs": {
   }

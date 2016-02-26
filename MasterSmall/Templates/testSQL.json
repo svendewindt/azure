@@ -299,9 +299,9 @@
 				"hardwareProfile": {
 					"vmSize": "[parameters('vmSize')]"
 				},
-				"availabilitySet": {
-					"id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
-				},
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
+        },
 				"osProfile": {
 					"computerName": "[concat(parameters('vmNamePrefix'), copyindex())]",
 					"adminUsername": "[parameters('adminUsername')]",

@@ -6,7 +6,7 @@
       "type": "string",
       "defaultValue": "Cust1",
       "minLength": 1,
-      "maxLength": 10,
+      "maxLength": 8,
       "metadata": {
         "description": "Name for the project. This will be used to name other resources."
       }
@@ -23,7 +23,7 @@
       "type": "string",
       "minLength": 5,
       "metadata": {
-        "description": "Name for the Windows domain."
+        "description": "Name for the Windows domain, something like domain.local"
       }
     },
     "DomainAdmin": {
@@ -55,7 +55,7 @@
 
     "DCSize": {
       "type": "string",
-      "defaultValue": "Standard_D1_V2",
+      "defaultValue": "Standard_D1_v2",
       "allowedValues": [
         "Standard_A1",
         "Standard_A2",
@@ -72,14 +72,6 @@
       ],
       "metadata": {
         "desciption": "Size of the domain controller."
-      }
-    },
-    "DCIPaddress": {
-      "type": "string",
-      "minLength": 4,
-      "defaultValue": "172.16.0.10",
-      "metadata": {
-        "description": "IP address for the DC."
       }
     },
     "RDSWindowsOSVersion": {
@@ -114,19 +106,62 @@
         "description": "Size of the RDS server."
       }
     },
-    "RDSIPAddress": {
+    "SQLEdition": {
       "type": "string",
-      "defaultValue": "172.16.1.20",
-      "minLength": 4,
+      "defaultValue": "Standard",
+      "allowedValues": [
+        "Standard",
+        "Enterprise"
+      ],
       "metadata": {
-        "description": "IP address for the RDS server."
+        "description": "Edition of the SQL server."
       }
     },
-
-    "AssetLocation": {
+    "SQLSize": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall"
+      "defaultValue": "Standard_DS2",
+      "allowedValues": [
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4"
+      ],
+      "metadata": {
+        "description": "Size of the SQL server. (Op premium storage)"
+      }
+    },
+    "RDSWebAccessWindowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2012-R2-Datacenter",
+        "Windows-Server-Technical-Preview"
+      ],
+      "metadata": {
+        "description": "Windows version for the RDS server."
+      }
+    },
+    "RDSWebAccessSize": {
+      "type": "string",
+      "defaultValue": "Standard_D1_v2",
+      "allowedValues": [
+        "Standard_A1",
+        "Standard_A2",
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_D1",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2"
+      ],
+      "metadata": {
+        "description": "Size of the RDS WebAccess."
+      }
     }
+
   },
   "variables": {
     "StandardStorageAccountName": "[tolower(concat(parameters('Project Name'),'standard'))]",
@@ -142,7 +177,18 @@
     "VNetSubnet2Name": "Servers",
     "VNetSubnet2Prefix": "172.16.1.0/24",
     "DC01Name": "[concat(parameters('Project Name'),'DC01')]",
-    "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]"
+    "DCIPaddress": "172.16.0.10",
+    "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]",
+    "RDS01IPAddress": "172.16.1.20",
+    "SQL01Name": "[concat(parameters('Project Name'), 'SQL01')]",
+    "SQL01IPAddress": "172.16.1.30",
+    "RDSWebAccess01Name": "[concat(parameters('Project Name'), 'RDSWA01')]",
+    "RDSWebAccess01IPAddress": "172.16.1.40",
+    "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall",
+    "WMFVersion": "5.0",
+    "customScriptUrl": "[concat(variables('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
+    "customScriptName": "startOrchestration.ps1",
+    "customScriptParameters": "[concat(' -RDSBroker ', variables('DC01Name'), ' -RDSWebAccess ', variables('RDSWebAccess01Name'), ' -RDSHost ', variables('RDS01Name'))]"
 
   },
   "resources": [
@@ -215,7 +261,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('AssetLocation'),'/Templates/createDC.json')]",
+          "uri": "[concat(variables('AssetLocation'),'/Templates/createDC.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -229,8 +275,9 @@
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
           "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
           "DCSize": { "value": "[parameters('DCSize')]" },
-          "DCIPAddress": {"value": "[parameters('DCIPAddress')]"},
-          "AssetLocation": { "value": "[parameters('AssetLocation')]" }
+          "DCIPAddress": { "value": "[variables('DCIPAddress')]" },
+          "AssetLocation": { "value": "[variables('AssetLocation')]" },
+          "WMFversion": { "value": "[variables('WMFversion')]" }
         }
       }
     },
@@ -244,7 +291,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('AssetLocation'),'/Templates/updateVNetDNS.json')]",
+          "uri": "[concat(variables('AssetLocation'),'/Templates/updateVNetDNS.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -255,7 +302,7 @@
           "VNetSubnet1Prefix": { "value": "[variables('VNetSubnet1Prefix')]" },
           "VNetSubnet2Name": { "value": "[variables('VNetSubnet2Name')]" },
           "VNetSubnet2Prefix": { "value": "[variables('VNetSubnet2Prefix')]" },
-          "DNSServer": { "value": "[parameters('DCIPAddress')]" }
+          "DNSServer": { "value": "[variables('DCIPAddress')]" }
         }
       }
     },
@@ -265,12 +312,13 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Resources/deployments/','createDC')]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('StandardStorageAccountName'))]",
         "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]"
       ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('AssetLocation'),'/Templates/createRDS.json')]",
+          "uri": "[concat(variables('AssetLocation'),'/Templates/createRDS.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -284,12 +332,173 @@
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
           "RDSWindowsOSVersion": { "value": "[parameters('RDSWindowsOSVersion')]" },
           "RDSSize": { "value": "[parameters('RDSSize')]" },
-          "RDSIPAddress": { "value": "[parameters('RDSIPAddress')]" },
-          "AssetLocation": { "value": "[parameters('AssetLocation')]" }
+          "RDSIPAddress": { "value": "[variables('RDS01IPAddress')]" },
+          "AssetLocation": { "value": "[variables('AssetLocation')]" }
+        }
+      }
+    },
+    {
+      "name": "CreateSQL",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createDC')]",
+        "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('StandardStorageAccountName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('PremiumStorageAccountName'))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('AssetLocation'),'/Templates/createSQL.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "Location": { "value": "[parameters('Location')]" },
+          "PremiumStorageAccountName": { "value": "[variables('PremiumStorageAccountName')]" },
+          "StandardStorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
+          "Vnetname": { "value": "[variables('VNetname')]" },
+          "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
+          "SQLName": { "value": "[variables('SQL01Name')]" },
+          "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
+          "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
+          "DomainName": { "value": "[parameters('Windows Domain name')]" },
+          "Edition": { "value": "[parameters('SQLEdition')]" },
+          "SQLSize": { "value": "[parameters('SQLSize')]" },
+          "SQLIPAddress": { "value": "[variables('SQL01IPAddress')]" },
+          "AssetLocation": { "value": "[variables('AssetLocation')]" }
+        }
+      }
+    },
+    {
+      "name": "CreateRDSWebAccess",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createDC')]",
+        "[concat('Microsoft.Resources/deployments/','UpdateVNetDNS')]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('StandardStorageAccountName'))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('AssetLocation'),'/Templates/createWebAccess.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "Location": { "value": "[parameters('Location')]" },
+          "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
+          "Vnetname": { "value": "[variables('VNetname')]" },
+          "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
+          "RDSWebAccessName": { "value": "[variables('RDSWebAccess01Name')]" },
+          "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
+          "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
+          "DomainName": { "value": "[parameters('Windows Domain name')]" },
+          "RDSWebAccessWindowsOSVersion": { "value": "[parameters('RDSWebAccessWindowsOSVersion')]" },
+          "RDSWebAccessSize": { "value": "[parameters('RDSWebAccessSize')]" },
+          "RDSWebAccessIPAddress": { "value": "[variables('RDSWebAccess01IPAddress')]" },
+          "AssetLocation": { "value": "[variables('AssetLocation')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('DC01Name'),'/BGInfo')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createDC')]"
+      ],
+      "location": "[parameters('Location')]",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "BGInfo",
+        "typeHandlerVersion": "2.1",
+        "settings": {
+          "Properties": [
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('RDS01Name'),'/BGInfo')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createRDS')]"
+      ],
+      "location": "[parameters('Location')]",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "BGInfo",
+        "typeHandlerVersion": "2.1",
+        "settings": {
+          "Properties": [
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('SQL01Name'),'/BGInfo')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createSQL')]"
+      ],
+      "location": "[parameters('Location')]",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "BGInfo",
+        "typeHandlerVersion": "2.1",
+        "settings": {
+          "Properties": [
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('RDSWebAccess01Name'),'/BGInfo')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','CreateRDSWebAccess')]"
+      ],
+      "location": "[parameters('Location')]",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "BGInfo",
+        "typeHandlerVersion": "2.1",
+        "settings": {
+          "Properties": [
+          ]
+        }
+      }
+    },
+    {
+      "name": "[concat(variables('DC01Name'),'/startOrchestration')]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/','createDC')]",
+        "[concat('Microsoft.Resources/deployments/','createRDS')]",
+        "[concat('Microsoft.Resources/deployments/','CreateRDSWebAccess')]"
+      ],
+      "tags": {
+        "displayName": "startOrchestration"
+      },
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.4",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[variables('customScriptUrl')]"
+          ],
+          "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('customScriptName'), variables('customScriptParameters'))]"
         }
       }
     }
-
   ],
   "outputs": {
     "DCSize": {
