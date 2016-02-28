@@ -16,7 +16,8 @@ param(
     New-Item -Path $destination -Name $folderName -ItemType directory
     #Download the logging module
     Invoke-WebRequest -Uri $source -OutFile "$($destination)\$($folderName)\Logging.psm1" 
-    #Logging functions can be used now.
+    Import-module Logging.psm1
+	#Logging functions can be used now.
     
     #Get DeployRDS.ps1
     $source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/CustomScripts/DeployRDS.ps1"
