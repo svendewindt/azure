@@ -38,7 +38,7 @@ Add-Content -Path $testLog -Value "Downloading loggingmodule..."
 Add-Content -Path $testLog -Value "Source: $($source)"
 Add-Content -Path $testLog -Value "Destination: $($destination)"
 
-<#
+
    $output = Invoke-WebRequest -Uri $source -OutFile "$($destination)\$($folderName)\Logging.psm1" 2>&1 
 Add-Content -Path $testLog -Value "Output invoke-webrequest $($output)"
     $output = Import-module Logging.psm1  2>&1
@@ -80,4 +80,3 @@ Add-Content -Path $testLog -Value "Output import-module $($output)"
 
     #.\1.ps1 -RDSBroker g1dc01 -RDSWebAccess g1rdswa01 -RDSHost g1rds01 -userName "adminsvdw" -password "Enter123"
 
-#>
