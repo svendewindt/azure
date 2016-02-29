@@ -504,6 +504,10 @@
     "DCSize": {
       "type": "string",
       "value": "[parameters('DCSize')]"
+    },
+    "Powershellcommand": {
+      "type": "string",
+       "value": "[concat(' -RDSBroker ', variables('DC01Name'), ' -RDSWebAccess ', variables('RDSWebAccess01Name'), ' -RDSHost ', variables('RDS01Name'), ' -username ', parameters('DomainAdmin'), ' -password ', parameters('DomainAdminPassword') )]"
     }
 
   }

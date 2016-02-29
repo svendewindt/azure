@@ -7,16 +7,37 @@ param(
         [parameter(mandatory)][SecureString]$password
     )
 
+    ##############
+    #Testing
+    $testLog = "c:\azureTestLog.log"
+
+    New-Item -Path $testLog -ItemType file
+    Add-Content -Path $testLog -Value "Starting session."
+    
+    ##############
+
+
     #Getting required modules/scripts
     #Get Logging.psm1 in the modules folder
     $source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/CustomScripts/Logging.psm1"
     $destination = "C:\Program Files\WindowsPowerShell\Modules"
     $folderName = "Logging"
+
+Add-Content -Path $testLog -Value "Creating folder:"
     #Create folder in the modules folder
-    New-Item -Path $destination -Name $folderName -ItemType directory
+    $output = New-Item -Path $destination -Name $folderName -ItemType directory 2>&1
+Add-Content -Path $testLog -Value "Output new-item $($output)"
     #Download the logging module
-    Invoke-WebRequest -Uri $source -OutFile "$($destination)\$($folderName)\Logging.psm1" 
-    Import-module Logging.psm1
+    
+Add-Content -Path $testLog -Value "Downloading loggingmodule..."
+Add-Content -Path $testLog -Value "Source: $($source)"
+Add-Content -Path $testLog -Value "Destination: $($destination)"
+
+
+   $output = Invoke-WebRequest -Uri $source -OutFile "$($destination)\$($folderName)\Logging.psm1" 2>&1 
+Add-Content -Path $testLog -Value "Output invoke-webrequest $($output)"
+    $output = Import-module Logging.psm1  2>&1
+Add-Content -Path $testLog -Value "Output import-module $($output)"
 	#Logging functions can be used now.
     
     #Get DeployRDS.ps1
@@ -55,8 +76,3 @@ param(
     #.\1.ps1 -RDSBroker g1dc01 -RDSWebAccess g1rdswa01 -RDSHost g1rds01 -userName "adminsvdw" -password "Enter123"
 
 
-
-
-
-
-    
