@@ -4,45 +4,40 @@ param(
         [parameter(mandatory)][String]$RDSWebAccess,
         [parameter(mandatory)][String]$RDSHost
     )
-
-    ##############
-    #Testing
     Set-StrictMode -Version 3.0
-    $testLog = "c:\azureTestLog.log"
-
-    New-Item -Path $testLog -ItemType file
-Add-Content -Path $testLog -Value "Starting session."
-Add-Content -Path $testLog -Value "$($RDSBroker)"
-Add-Content -Path $testLog -Value "$($RDSWebAccess)"
-Add-Content -Path $testLog -Value "$($RDSHost)"
-    ##############
-
     #Getting required modules/scripts
     #Get Logging.psm1 in the modules folder
     $source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/CustomScripts/Logging.psm1"
     $destination = "C:\Program Files\WindowsPowerShell\Modules"
     $folderName = "Logging"
-
-Add-Content -Path $testLog -Value "Creating folder:"
     #Create folder in the modules folder
-    $output = New-Item -Path $destination -Name $folderName -ItemType directory 2>&1
-Add-Content -Path $testLog -Value "Output new-item $($output)"
+    New-Item -Path $destination -Name $folderName -ItemType directory 2>&1
     #Download the logging module
-    
-Add-Content -Path $testLog -Value "Downloading loggingmodule..."
-Add-Content -Path $testLog -Value "Source: $($source)"
-Add-Content -Path $testLog -Value "Destination: $($destination)"
-
-
-   $output = Invoke-WebRequest -Uri $source -OutFile "$($destination)\$($folderName)\Logging.psm1" 2>&1 
-Add-Content -Path $testLog -Value "Output invoke-webrequest $($output)"
-    $output = Import-module Logging.psm1  2>&1
-Add-Content -Path $testLog -Value "Output import-module $($output)"
+    Invoke-WebRequest -Uri $source -OutFile "$($destination)\$($folderName)\Logging.psm1" 2>&1 
+    Import-module Logging.psm1  2>&1
 	#Logging functions can be used now.
 
+    $fqdnRDSBroker = [System.Net.Dns]::GetHostByName($RDSBroker).hostname
+    $fqdnRDSWebAccess = [System.Net.Dns]::GetHostByName($RDSWebAccess).hostname
+    $fqdnRDSHost = [System.Net.Dns]::GetHostByName($RDSHost).hostname
+ 
+	$log = "c:\azureSetup.log"
+    new-logFile -log $log   
+    write-log -log $log -title "Starting Orchestration"
+    write-log -log $log -line "Variables used:"
+
+    write-log -log $log -line "FQDN Broker         : $($fqdnRDSBroker)"
+    write-log -log $log -line "FQDN WebAccess      : $($fqdnRDSWebAccess)"
+    write-log -log $log -line "FQDN RDS            : $($fqdnRDSHost)"
+
     #Creating Installer user
-    $username = "Installer"
-    $securePassword = ConvertTo-SecureString "Enter123" -AsPlainText -Force 
+    Write-log -log $log -title "Creating Installer user"
+	$username = "Installer"
+	Write-log -log $log -line "Username            : $($username)"
+	#Creating Password
+	[String]$guid = [System.Guid]::NewGuid()
+	Write-log -log $log -line "Password            : $($guid.Substring(1,15))"
+    $securePassword = ConvertTo-SecureString $($guid.Substring(1,15)) -AsPlainText -Force 
     New-ADUser -Name $username -SamAccountName $username -UserPrincipalName $username -AccountPassword $securePassword -Enabled $true
     Add-ADGroupMember "domain admins" -Members $username 
     
@@ -51,23 +46,7 @@ Add-Content -Path $testLog -Value "Output import-module $($output)"
     $destination = $PSScriptRoot
     $deployRDSScript = "$($PSScriptRoot)\deployRDS.ps1"
     Invoke-WebRequest -Uri $source -OutFile "$deployRDSScript"
-
    
-    $log = "c:\azureSetup.log"
-    new-logFile -log $log
-
-    $fqdnRDSBroker = [System.Net.Dns]::GetHostByName($RDSBroker).hostname
-    $fqdnRDSWebAccess = [System.Net.Dns]::GetHostByName($RDSWebAccess).hostname
-    $fqdnRDSHost = [System.Net.Dns]::GetHostByName($RDSHost).hostname
-    
-    write-log -log $log -title "Starting Orchestration"
-    write-log -log $log -line "Variables used:"
-
-    write-log -log $log -line "FQDN Broker         : $($fqdnRDSBroker)"
-    write-log -log $log -line "FQDN WebAccess      : $($fqdnRDSWebAccess)"
-    write-log -log $log -line "FQDN RDS            : $($fqdnRDSHost)"
-
-    
     $domainName = (gwmi WIN32_ComputerSystem).domain
     write-log -log $log -line "Domainname\username : $($domainName)\$($userName)"
     $credential = New-Object System.Management.Automation.PSCredential ("$domainName\$($userName)",$securePassword)
