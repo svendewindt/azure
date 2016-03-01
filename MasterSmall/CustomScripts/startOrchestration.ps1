@@ -38,20 +38,28 @@ param(
 	[String]$guid = [System.Guid]::NewGuid()
 	Write-log -log $log -line "Password            : $($guid.Substring(1,15))"
     $securePassword = ConvertTo-SecureString $($guid.Substring(1,15)) -AsPlainText -Force 
+	Write-log -log $log -line "Creating user"
     New-ADUser -Name $username -SamAccountName $username -UserPrincipalName $username -AccountPassword $securePassword -Enabled $true
+	Write-log -log $log -line "Adding user to group"
     Add-ADGroupMember "domain admins" -Members $username 
     
     #Get DeployRDS.ps1
-    $source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/CustomScripts/DeployRDS.ps1"
+	$scriptName = "DeployRDS.ps1"
+	Write-log -log $log -title "Downloading $($scriptName)"
+    $source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/CustomScripts/$($scriptName)"
+	Write-log -log $log -line "Source              : $($source)"
     $destination = $PSScriptRoot
-    $deployRDSScript = "$($PSScriptRoot)\deployRDS.ps1"
+    $deployRDSScript = "$($PSScriptRoot)\$($scriptName)"
+	Write-log -log $log -line "Destination         : $($deployRDSScript)"
+	Write-log -log $log -line "Downloading"
     Invoke-WebRequest -Uri $source -OutFile "$deployRDSScript"
    
+	Write-log -log $log -title "Creating Credentials"
     $domainName = (gwmi WIN32_ComputerSystem).domain
     write-log -log $log -line "Domainname\username : $($domainName)\$($userName)"
     $credential = New-Object System.Management.Automation.PSCredential ("$domainName\$($userName)",$securePassword)
     
-    Write-Host "Script to run: $($deployRDSScript)"
+	Write-log -log $log -title "Starting $($scriptName)"
     Invoke-Command -FilePath $deployRDSScript -ComputerName $fqdnRDSBroker -Credential $credential -ArgumentList $fqdnRDSBroker, $fqdnRDSWebAccess, $fqdnRDSHost, $log
 
 
