@@ -477,7 +477,7 @@
       "name": "[concat(variables('DC01Name'),'/startOrchestration')]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "location": "[parameters('Location')]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2015-05-01-preview",
       "dependsOn": [
         "[concat('Microsoft.Resources/deployments/','createDC')]",
         "[concat('Microsoft.Resources/deployments/','createRDS')]",
