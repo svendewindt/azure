@@ -188,7 +188,7 @@
     "WMFVersion": "5.0",
     "customScriptUrl": "[concat(variables('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
     "customScriptName": "startOrchestration.ps1",
-    "customScriptParameters": "[concat(' -RDSBroker ', variables('DC01Name'), ' -RDSWebAccess ', variables('RDSWebAccess01Name'), ' -RDSHost ', variables('RDS01Name'), ' -username ', parameters('DomainAdmin'), ' -password $(ConvertTo-SecureString ', parameters('DomainAdminPassword'), ' -AsPlainText -Force)')]"
+    "customScriptParameters": "[concat(' -RDSBroker ', variables('DC01Name'), ' -RDSWebAccess ', variables('RDSWebAccess01Name'), ' -RDSHost ', variables('RDS01Name'))]"
 
   },
   "resources": [
