@@ -42,6 +42,11 @@ param(
     New-ADUser -Name $username -SamAccountName $username -UserPrincipalName $username -AccountPassword $securePassword -Enabled $true
 	Write-log -log $log -line "Adding user to group"
     Add-ADGroupMember "domain admins" -Members $username 
+
+	Write-log -log $log -title "Creating Credentials"
+    $domainName = (gwmi WIN32_ComputerSystem).domain
+    write-log -log $log -line "Domainname\username : $($domainName)\$($userName)"
+    $credential = New-Object System.Management.Automation.PSCredential ("$domainName\$($userName)",$securePassword)
     
     #Get DeployRDS.ps1
 	$scriptName = "DeployRDS.ps1"
@@ -54,11 +59,6 @@ param(
 	Write-log -log $log -line "Downloading"
     Invoke-WebRequest -Uri $source -OutFile "$deployRDSScript"
    
-	Write-log -log $log -title "Creating Credentials"
-    $domainName = (gwmi WIN32_ComputerSystem).domain
-    write-log -log $log -line "Domainname\username : $($domainName)\$($userName)"
-    $credential = New-Object System.Management.Automation.PSCredential ("$domainName\$($userName)",$securePassword)
-    
 	Write-log -log $log -title "Starting $($scriptName)"
     Invoke-Command -FilePath $deployRDSScript -ComputerName $fqdnRDSBroker -Credential $credential -ArgumentList $fqdnRDSBroker, $fqdnRDSWebAccess, $fqdnRDSHost, $log
 
