@@ -16,7 +16,8 @@
     },
     "AdminPassword": { "type": "securestring" },
     "DomainName": { "type": "string" },
-    "DCAvailabilitySetName": {"type": "string"},
+    "DCAvailabilitySetName": { "type": "string" },
+    "DCSecurityGroupName": { "type": "string"},
     "DCWindowsOSVersion": { "type": "string" },
     "DCSize": { "type": "string" },
     "DCIPAddress": {
@@ -63,6 +64,7 @@
         "displayName": "[variables('DCNicName')]"
       },
       "properties": {
+        "networkSecurityGroup": "[parameters('DCSecurityGroupName')]",
         "ipConfigurations": [
           {
             "name": "ipconfig1",

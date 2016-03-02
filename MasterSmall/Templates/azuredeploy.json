@@ -5,7 +5,7 @@
     "Project Name": {
       "type": "string",
       "defaultValue": "Cust1",
-      "minLength": 1,
+      "minLength": 3,
       "maxLength": 8,
       "metadata": {
         "description": "Name for the project. This will be used to name other resources."
@@ -131,18 +131,22 @@
     "VNetSubnet2Name": "Servers",
     "VNetSubnet2Prefix": "172.16.1.0/24",
     "DCAvailabilitySetName": "[concat(parameters('Project Name'), 'DCAvailabilitySet')]",
+    "DCSecurityGroupName": "[concat(parameters('Project Name'), 'DCSecurityGroup')]",
     "DC01Name": "[concat(parameters('Project Name'),'DC01')]",
     "DCIPaddress": "172.16.0.10",
     "DCWindowsOSVersion": "2012-R2-Datacenter",
     "RDSAvailabilitySetName": "[concat(parameters('Project Name'), 'RDSAvailabilitySet')]",
+    "RDSSecurityGroupName": "[concat(parameters('Project Name'), 'RDSSecurityGroup')]",
     "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]",
     "RDS01IPAddress": "172.16.1.20",
     "RDSWindowsOSVersion": "2012-R2-Datacenter",
     "SQLAvailabilitySetName": "[concat(parameters('Project Name'), 'SQLAvailabilitySet')]",
+    "SQLSecurityGroupName": "[concat(parameters('Project Name'), 'SQLSecurityGroup')]",
     "SQL01Name": "[concat(parameters('Project Name'), 'SQL01')]",
     "SQL01IPAddress": "172.16.1.30",
     "SQLEdition": "Standard",
     "RDSWebAccessAvailabilitySetName": "[concat(parameters('Project Name'), 'RDSWebAccessAvailabilitySet')]",
+    "RDSWebAccessSecurityGroupName": "[concat(parameters('Project Name'), 'RDSWebAccessSecurityGroup')]",
     "RDSWebAccess01Name": "[concat(parameters('Project Name'), 'RDSWA01')]",
     "RDSWebAccess01IPAddress": "172.16.1.40",
     "RDSWebAccessWindowsOSVersion": "2012-R2-Datacenter",
@@ -212,13 +216,37 @@
       }
     },
     {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[variables('DCSecurityGroupName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "Allow_rdp",
+            "properties": {
+              "description": "Allow RDP",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "CreateDC",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "[concat('Microsoft.Network/virtualNetworks/',variables('VNetname'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('StandardStorageAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('PremiumStorageAccountName'))]"
+        "[concat('Microsoft.Network/networkSecurityGroups/', variables('DCSecurityGroupName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -232,6 +260,7 @@
           "Vnetname": { "value": "[variables('VNetname')]" },
           "VNetSubnet1Name": { "value": "[variables('VNetSubnet1Name')]" },
           "DCAvailabilitySetName": { "value": "[variables('DCAvailabilitySetName')]" },
+          "DCSecurityGroupName": {"value": "[variables('DCSecurityGroupName')]"},
           "DCName": { "value": "[variables('DC01Name')]" },
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
