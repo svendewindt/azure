@@ -3,16 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "G1"
+            "value": "abc1"
         },
         "Windows Domain name": {
-            "value": "sven.local"
+            "value": "abc1.local"
         },
         "DomainAdminPassword": {
             "value": "Enter123"
         },
         "DCSize": {
-            "value": "Standard_D2_v2"
+            "value": "Standard_D1_v2"
         },
         "RDSSize": {
             "value": "Standard_D1_v2"
