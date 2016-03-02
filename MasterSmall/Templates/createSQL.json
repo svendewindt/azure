@@ -205,7 +205,8 @@
       "name": "[concat(parameters('SQLName'),'/JoinDomain')]",
       "location": "[parameters('Location')]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('SQLName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('SQLName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/extensions/', 'configureSQl')]"
       ],
       "properties": {
         "publisher": "Microsoft.Compute",

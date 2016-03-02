@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "BED"
+            "value": "bm1"
         },
         "Windows Domain name": {
-            "value": "BED.local"
+            "value": "bm1.local"
         },
         "DomainAdminPassword": {
             "value": "Enter123"
