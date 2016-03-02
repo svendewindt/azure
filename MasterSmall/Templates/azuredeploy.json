@@ -226,7 +226,7 @@
             "name": "Allow_rdp",
             "properties": {
               "description": "Allow RDP",
-              "protocol": "Tcp",
+              "protocol": "*",
               "sourcePortRange": "*",
               "destinationPortRange": "3389",
               "sourceAddressPrefix": "*",
@@ -250,7 +250,7 @@
             "name": "Allow_rdp",
             "properties": {
               "description": "Allow RDP",
-              "protocol": "Tcp",
+              "protocol": "*",
               "sourcePortRange": "*",
               "destinationPortRange": "3389",
               "sourceAddressPrefix": "*",
@@ -274,7 +274,7 @@
             "name": "Allow_rdp",
             "properties": {
               "description": "Allow RDP",
-              "protocol": "Tcp",
+              "protocol": "*",
               "sourcePortRange": "*",
               "destinationPortRange": "3389",
               "sourceAddressPrefix": "*",
@@ -298,13 +298,55 @@
             "name": "Allow_rdp",
             "properties": {
               "description": "Allow RDP",
-              "protocol": "Tcp",
+              "protocol": "*",
               "sourcePortRange": "*",
               "destinationPortRange": "3389",
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "access": "Allow",
               "priority": 100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "Allow_https",
+            "properties": {
+              "description": "Allow HTTPS",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 110,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "Allow_http",
+            "properties": {
+              "description": "Allow HTTP",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 120,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "Allow_rdp_udp",
+            "properties": {
+              "description": "Allow RDP - UDP",
+              "protocol": "Udp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3391",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 130,
               "direction": "Inbound"
             }
           }
