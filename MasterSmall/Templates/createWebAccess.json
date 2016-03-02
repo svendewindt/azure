@@ -6,7 +6,8 @@
     "StorageAccountName": { "type": "string" },
     "VNetName": { "type": "string" },
     "VNetSubnet1Name": { "type": "string" },
-    "RDSWebAccessAvailabilitySetName": {"type": "string" },
+    "RDSWebAccessAvailabilitySetName": { "type": "string" },
+    "RDSWebAccessSecurityGroupName": { "type": "string"},
     "RDSWebAccessName": {
       "type": "string",
       "minLength": 1
@@ -59,6 +60,9 @@
         "displayName": "[variables('RDSWebAccessNicName')]"
       },
       "properties": {
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('RDSWebAccessSecurityGroupName'))]"
+        },
         "ipConfigurations": [
           {
             "name": "ipconfig1",
