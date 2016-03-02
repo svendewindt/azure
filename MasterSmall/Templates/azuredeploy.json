@@ -289,7 +289,7 @@
           "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
           "Vnetname": { "value": "[variables('VNetname')]" },
           "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
-          "RDSAvailabilitySetName": { "value": "variables('RDSAvailabilitySetName')" },
+          "RDSAvailabilitySetName": { "value": "[variables('RDSAvailabilitySetName')]" },
           "RDSName": { "value": "[variables('RDS01Name')]" },
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
