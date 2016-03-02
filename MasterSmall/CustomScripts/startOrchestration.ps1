@@ -47,7 +47,31 @@ param(
     $domainName = (gwmi WIN32_ComputerSystem).domain
     write-log -log $log -line "Domainname\username : $($domainName)\$($userName)"
     $credential = New-Object System.Management.Automation.PSCredential ("$domainName\$($userName)",$securePassword)
-    
+
+    #Create domain structure
+    write-log -log $log -title "Creating AD structure"
+    $OUPath = $domainName.split('.')
+    write-log -log $log -line "Creating OU's"
+    $OUDomain = "DC=$($OUPath[0]),DC=$($OUPath[1])"
+    $OUsToCreate = [ordered]@{
+        "$($OUPath[0])" = "$($OUDomain)";
+        "Groups" = "OU=$($OUPath[0]),$($OUDomain)";
+        "Servers" = "OU=$($OUPath[0]),$($OUDomain)";
+        "RDS" = "OU=Servers,OU=$($OUPath[0]),$($OUDomain)";
+        "Services" = "OU=$($OUPath[0]),$($OUDomain)";
+        "Users" = "OU=$($OUPath[0]),$($OUDomain)"
+    }
+    foreach($OU in $OUsToCreate.Keys){
+        write-log -log $log -line "Creating $($OU) in $($OUsToCreate.$OU)"
+        $output = New-ADOrganizationalUnit -Name $OU -Path $OUsToCreate.$OU 2>&1 -ProtectedFromAccidentalDeletion $false
+        write-log -log $log -line $output
+    }
+
+    #Create user group
+    $RemoteUsersGroupName = "Remote Users"
+    write-log -log $log -line "Creating security group $($RemoteUsersGroupName)"
+    New-ADGroup -Name $RemoteUsersGroupName -Path "OU=Groups,$($OUsToCreate.'Groups')" -GroupScope Global
+
     #Get DeployRDS.ps1
 	$scriptName = "DeployRDS.ps1"
 	Write-log -log $log -title "Downloading $($scriptName)"
