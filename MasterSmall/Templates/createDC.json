@@ -64,7 +64,9 @@
         "displayName": "[variables('DCNicName')]"
       },
       "properties": {
-        "networkSecurityGroup": "[parameters('DCSecurityGroupName')]",
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('DCSecurityGroupName'))]"
+        },
         "ipConfigurations": [
           {
             "name": "ipconfig1",
