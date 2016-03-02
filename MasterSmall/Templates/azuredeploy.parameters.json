@@ -14,9 +14,6 @@
         "DCSize": {
             "value": "Standard_D2_v2"
         },
-        "DCWindowsOSVersion": {
-            "value": "2012-R2-Datacenter"
-        },
         "RDSSize": {
             "value": "Standard_D1_v2"
         },
@@ -26,7 +23,5 @@
         "RDSWebAccessSize": {
             "value": "Standard_D1_v2"
         }
-       
-       
     }
 }

@@ -6,6 +6,7 @@
     "StorageAccountName": { "type": "string" },
     "VNetName": { "type": "string" },
     "VNetSubnet1Name": { "type": "string" },
+    "RDSWebAccessAvailabilitySetName": {"type": "string" },
     "RDSWebAccessName": {
       "type": "string",
       "minLength": 1
@@ -35,14 +36,13 @@
     "RDSWebAccessNicName": "[concat(parameters('RDSWebAccessName'), 'NetworkInterface')]",
     "RDSWebAccessPIPName": "[concat(parameters('RDSWebAccessName'), 'PublicIP')]",
     "RDSWebAccessPIPDnsName": "[tolower(parameters('RDSWebAccessName'))]",
-    "RDSWebAccessAvailabilitySetName": "[concat(parameters('RDSWebAccessName'), 'AvailabilitySet')]",
     "installARDSWebAccessonfigurationFunction": "installARDSWebAccessonfiguration.ps1\\Main",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureRDSWA.ps1.zip')]",
     "configurationFunction": "configureRDSWA.ps1\\configureRDSWA"
   },
   "resources": [
     {
-      "name": "[variables('RDSWebAccessAvailabilitySetName')]",
+      "name": "[parameters('RDSWebAccessAvailabilitySetName')]",
       "type": "Microsoft.Compute/availabilitySets",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15"
@@ -81,14 +81,14 @@
       "apiVersion": "2015-06-15",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('RDSWebAccessNicName'))]",
-        "[concat('Microsoft.Compute/availabilitySets/', variables('RDSWebAccessAvailabilitySetName'))]"
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('RDSWebAccessAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "WebAccess"
       },
       "properties": {
         "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('RDSWebAccessAvailabilitySetName'))]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('RDSWebAccessAvailabilitySetName'))]"
         },
         "hardwareProfile": {
           "vmSize": "[parameters('RDSWebAccessSize')]"

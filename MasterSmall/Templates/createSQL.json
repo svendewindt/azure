@@ -7,6 +7,7 @@
     "StandardStorageAccountName": { "type": "string" },
     "VNetName": { "type": "string" },
     "VNetSubnet1Name": { "type": "string" },
+    "SQLAvailabilitySetName": {"type": "string" },
     "SQLName": {
       "type": "string",
       "minLength": 1
@@ -43,14 +44,13 @@
     "SQLNicName": "[concat(parameters('SQLName'), 'NetworkInterface')]",
     "SQLPIPName": "[concat(parameters('SQLName'), 'PublicIP')]",
     "SQLPIPDnsName": "[tolower(parameters('SQLName'))]",
-    "SQLAvailabilitySetName": "[concat(parameters('SQLName'), 'AvailabilitySet')]",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureSQL.ps1.zip')]",
     "configurationFunction": "configureSQL.ps1\\configureSQL"
 
   },
   "resources": [
     {
-      "name": "[variables('SQLAvailabilitySetName')]",
+      "name": "[parameters('SQLAvailabilitySetName')]",
       "type": "Microsoft.Compute/availabilitySets",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15"
@@ -91,14 +91,14 @@
       "apiVersion": "2015-06-15",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('SQLNicName'))]",
-        "[concat('Microsoft.Compute/availabilitySets/', variables('SQLAvailabilitySetName'))]"
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('SQLAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "[parameters('SQLName')]"
       },
       "properties": {
         "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('SQLAvailabilitySetName'))]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('SQLAvailabilitySetName'))]"
         },
         "hardwareProfile": {
           "vmSize": "[variables('SQLVmSize')]"

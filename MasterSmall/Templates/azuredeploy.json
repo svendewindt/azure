@@ -16,21 +16,21 @@
       "defaultValue": "West Europe",
       "allowedValues": [ "East China", "East US2", "West Europe", "West Japan", "West US", "Southeast Asia" ],
       "metadata": {
-        "description": "The location to rollout the project. This location must support premium storage."
+        "description": "The location to roll out the project. This location must support premium storage."
       }
     },
     "Windows Domain name": {
       "type": "string",
       "minLength": 5,
       "metadata": {
-        "description": "Name for the Windows domain, something like domain.local"
+        "description": "Name of the Windows domain, something like domain.local"
       }
     },
     "DomainAdmin": {
       "type": "string",
       "defaultValue": "adminSVDW",
       "metadata": {
-        "description": "Name for the domain administrator."
+        "description": "Name of the domain administrator."
       }
     },
     "DomainAdminPassword": {
@@ -40,19 +40,6 @@
         "description": "Password for the domain administrator"
       }
     },
-
-    "DCWindowsOSVersion": {
-      "type": "string",
-      "defaultValue": "2012-R2-Datacenter",
-      "allowedValues": [
-        "2012-R2-Datacenter",
-        "Windows-Server-Technical-Preview"
-      ],
-      "metadata": {
-        "description": "Windows version for the domain controller."
-      }
-    },
-
     "DCSize": {
       "type": "string",
       "defaultValue": "Standard_D1_v2",
@@ -72,17 +59,6 @@
       ],
       "metadata": {
         "desciption": "Size of the domain controller."
-      }
-    },
-    "RDSWindowsOSVersion": {
-      "type": "string",
-      "defaultValue": "2012-R2-Datacenter",
-      "allowedValues": [
-        "2012-R2-Datacenter",
-        "Windows-Server-Technical-Preview"
-      ],
-      "metadata": {
-        "description": "Windows version for the RDS server."
       }
     },
     "RDSSize": {
@@ -106,17 +82,6 @@
         "description": "Size of the RDS server."
       }
     },
-    "SQLEdition": {
-      "type": "string",
-      "defaultValue": "Standard",
-      "allowedValues": [
-        "Standard",
-        "Enterprise"
-      ],
-      "metadata": {
-        "description": "Edition of the SQL server."
-      }
-    },
     "SQLSize": {
       "type": "string",
       "defaultValue": "Standard_DS2",
@@ -127,17 +92,6 @@
       ],
       "metadata": {
         "description": "Size of the SQL server. (Op premium storage)"
-      }
-    },
-    "RDSWebAccessWindowsOSVersion": {
-      "type": "string",
-      "defaultValue": "2012-R2-Datacenter",
-      "allowedValues": [
-        "2012-R2-Datacenter",
-        "Windows-Server-Technical-Preview"
-      ],
-      "metadata": {
-        "description": "Windows version for the RDS server."
       }
     },
     "RDSWebAccessSize": {
@@ -176,14 +130,22 @@
     "VNetSubnet1Prefix": "172.16.0.0/24",
     "VNetSubnet2Name": "Servers",
     "VNetSubnet2Prefix": "172.16.1.0/24",
+    "DCAvailabilitySetName": "DCAvailabilitySet",
     "DC01Name": "[concat(parameters('Project Name'),'DC01')]",
     "DCIPaddress": "172.16.0.10",
+    "DCWindowsOSVersion": "2012-R2-Datacenter",
+    "RDSAvailabilitySetName": "RDSAvailabilitySet",
     "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]",
     "RDS01IPAddress": "172.16.1.20",
+    "RDSWindowsOSVersion": "2012-R2-Datacenter",
+    "SQLAvailabilitySetName": "SQLAvailabilitySet]",
     "SQL01Name": "[concat(parameters('Project Name'), 'SQL01')]",
     "SQL01IPAddress": "172.16.1.30",
+    "SQLEdition": "Standard",
+    "RDSWebAccessAvailabilitySetName": "RDSWebAccessAvailabilitySet')]",
     "RDSWebAccess01Name": "[concat(parameters('Project Name'), 'RDSWA01')]",
     "RDSWebAccess01IPAddress": "172.16.1.40",
+    "RDSWebAccessWindowsOSVersion": "2012-R2-Datacenter",
     "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall",
     "WMFVersion": "5.0",
     "customScriptUrl": "[concat(variables('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
@@ -269,11 +231,12 @@
           "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
           "Vnetname": { "value": "[variables('VNetname')]" },
           "VNetSubnet1Name": { "value": "[variables('VNetSubnet1Name')]" },
+          "DCAvailabilitySetName": { "value": "[variables('DCAvailabilitySetName')]" },
           "DCName": { "value": "[variables('DC01Name')]" },
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
-          "DCWindowsOSVersion": { "value": "[parameters('DCWindowsOSVersion')]" },
+          "DCWindowsOSVersion": { "value": "[variables('DCWindowsOSVersion')]" },
           "DCSize": { "value": "[parameters('DCSize')]" },
           "DCIPAddress": { "value": "[variables('DCIPAddress')]" },
           "AssetLocation": { "value": "[variables('AssetLocation')]" },
@@ -326,11 +289,12 @@
           "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
           "Vnetname": { "value": "[variables('VNetname')]" },
           "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
+          "RDSAvailabilitySetName": { "value": "variables('RDSAvailabilitySetName')" },
           "RDSName": { "value": "[variables('RDS01Name')]" },
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
-          "RDSWindowsOSVersion": { "value": "[parameters('RDSWindowsOSVersion')]" },
+          "RDSWindowsOSVersion": { "value": "[variables('RDSWindowsOSVersion')]" },
           "RDSSize": { "value": "[parameters('RDSSize')]" },
           "RDSIPAddress": { "value": "[variables('RDS01IPAddress')]" },
           "AssetLocation": { "value": "[variables('AssetLocation')]" }
@@ -360,10 +324,11 @@
           "Vnetname": { "value": "[variables('VNetname')]" },
           "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
           "SQLName": { "value": "[variables('SQL01Name')]" },
+          "SQLAvailabilitySetName": { "value": "[variables('SQLAvailabilitySetName')]" },
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
-          "Edition": { "value": "[parameters('SQLEdition')]" },
+          "Edition": { "value": "[variables('SQLEdition')]" },
           "SQLSize": { "value": "[parameters('SQLSize')]" },
           "SQLIPAddress": { "value": "[variables('SQL01IPAddress')]" },
           "AssetLocation": { "value": "[variables('AssetLocation')]" }
@@ -390,11 +355,12 @@
           "StorageAccountName": { "value": "[variables('StandardStorageAccountName')]" },
           "Vnetname": { "value": "[variables('VNetname')]" },
           "VNetSubnet1Name": { "value": "[variables('VNetSubnet2Name')]" },
+          "RDSWebAccessAvailabilitySetName": { "value": "[variables('RDSWebAccessAvailabilitySetName')]" },
           "RDSWebAccessName": { "value": "[variables('RDSWebAccess01Name')]" },
           "AdminUserName": { "value": "[parameters('domainAdmin') ]" },
           "AdminPassword": { "value": "[ parameters('domainAdminPassword')]" },
           "DomainName": { "value": "[parameters('Windows Domain name')]" },
-          "RDSWebAccessWindowsOSVersion": { "value": "[parameters('RDSWebAccessWindowsOSVersion')]" },
+          "RDSWebAccessWindowsOSVersion": { "value": "[variables('RDSWebAccessWindowsOSVersion')]" },
           "RDSWebAccessSize": { "value": "[parameters('RDSWebAccessSize')]" },
           "RDSWebAccessIPAddress": { "value": "[variables('RDSWebAccess01IPAddress')]" },
           "AssetLocation": { "value": "[variables('AssetLocation')]" }

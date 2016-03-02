@@ -6,6 +6,7 @@
     "StorageAccountName": { "type": "string" },
     "VNetName": { "type": "string" },
     "VNetSubnet1Name": { "type": "string" },
+    "RDSAvailabilitySetName": {"type": "string"},
     "RDSName": {
       "type": "string",
       "minLength": 1
@@ -35,14 +36,13 @@
     "RDSNicName": "[concat(parameters('RDSName'), 'NetworkInterface')]",
     "RDSPIPName": "[concat(parameters('RDSName'), 'PublicIP')]",
     "RDSPIPDnsName": "[tolower(parameters('RDSName'))]",
-    "RDSAvailabilitySetName": "[concat(parameters('RDSName'), 'AvailabilitySet')]",
     "installADConfigurationFunction": "installADConfiguration.ps1\\Main",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureRDS.ps1.zip')]",
     "configureRDSConfigurationFunction": "configureRDS.ps1\\configureRDS"
   },
   "resources": [
     {
-      "name": "[variables('RDSAvailabilitySetName')]",
+      "name": "[parameters('RDSAvailabilitySetName')]",
       "type": "Microsoft.Compute/availabilitySets",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15"
@@ -83,14 +83,14 @@
       "apiVersion": "2015-06-15",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('RDSNicName'))]",
-        "[concat('Microsoft.Compute/availabilitySets/', variables('RDSAvailabilitySetName'))]"
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('RDSAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "[parameters('RDSName')]"
       },
       "properties": {
         "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('RDSAvailabilitySetName'))]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('RDSAvailabilitySetName'))]"
         },
         "hardwareProfile": {
           "vmSize": "[variables('RDSVmSize')]"

@@ -15,7 +15,8 @@
       "minLength": 1
     },
     "AdminPassword": { "type": "securestring" },
-    "DomainName": {"type": "string"},
+    "DomainName": { "type": "string" },
+    "DCAvailabilitySetName": {"type": "string"},
     "DCWindowsOSVersion": { "type": "string" },
     "DCSize": { "type": "string" },
     "DCIPAddress": {
@@ -25,7 +26,7 @@
     "AssetLocation": { "type": "string" },
     "WMFversion": {
       "type": "string",
-        "defaultValue": "5.0"
+      "defaultValue": "5.0"
     }
   },
   "variables": {
@@ -39,13 +40,12 @@
     "DCNicName": "[concat(parameters('DCName'), 'NetworkInterface')]",
     "DCPIPName": "[concat(parameters('DCName'), 'PublicIP')]",
     "DCPIPDnsName": "[tolower(parameters('DCName'))]",
-    "DCAvailabilitySetName": "[concat(parameters('DCName'), 'AvailabilitySet')]",
     "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureDC.ps1.zip')]",
     "configurationFunction": "configureDC.ps1\\configureDC"
   },
   "resources": [
     {
-      "name": "[variables('DCAvailabilitySetName')]",
+      "name": "[parameters('DCAvailabilitySetName')]",
       "type": "Microsoft.Compute/availabilitySets",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15"
@@ -87,7 +87,7 @@
       "apiVersion": "2015-06-15",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('DCNicName'))]",
-        "[concat('Microsoft.Compute/availabilitySets/', variables('DCAvailabilitySetName'))]"
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('DCAvailabilitySetName'))]"
       ],
       "tags": {
         "displayName": "DC"
@@ -95,7 +95,7 @@
 
       "properties": {
         "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('DCAvailabilitySetName'))]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('DCAvailabilitySetName'))]"
         },
           
         "hardwareProfile": {

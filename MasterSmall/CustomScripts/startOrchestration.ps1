@@ -62,6 +62,8 @@ param(
 	Write-log -log $log -title "Starting $($scriptName)"
     Invoke-Command -FilePath $deployRDSScript -ComputerName $fqdnRDSBroker -Credential $credential -ArgumentList $fqdnRDSBroker, $fqdnRDSWebAccess, $fqdnRDSHost, $log
 
+	#remove Installer user.
+
 
     #.\1.ps1 -RDSBroker g1dc01 -RDSWebAccess g1rdswa01 -RDSHost g1rds01
 
