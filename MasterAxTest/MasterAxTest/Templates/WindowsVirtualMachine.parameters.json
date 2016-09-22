@@ -7,6 +7,12 @@
         },
         "dnsNameForPublicIP": {
             "value": null
+        },
+        "Windows Domain name": {
+            "value": "kus.local"
+        },
+        "DomainAdminPassword": {
+            "value": "Enter123**"
         }
     }
 }

@@ -7,6 +7,7 @@
     "VNetName": { "type": "string" },
     "VNetSubnet1Name": { "type": "string" },
     "DCName": {
+      "defaultValue": "default",
       "type": "string",
       "minLength": 1
     },
