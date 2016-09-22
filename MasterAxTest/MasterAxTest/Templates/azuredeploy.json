@@ -40,6 +40,10 @@
         "description": "Password for the domain administrator"
       }
     },
+    "dnsNameForPublicIP": {
+      "type": "string",
+      "defaultValue": "niemendalle"
+    },
     "DCSize": {
       "type": "string",
       "defaultValue": "Standard_D1_v2",
