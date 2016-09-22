@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "bm1"
+            "value": "abc"
         },
         "Windows Domain name": {
-            "value": "bm1.local"
+            "value": "abc.local"
         },
         "DomainAdminPassword": {
             "value": "Enter123"
@@ -22,6 +22,9 @@
         },
         "RDSWebAccessSize": {
             "value": "Standard_D1_v2"
+        },
+        "DomainAdmin": {
+            "value": "adminABC"
         }
     }
 }
