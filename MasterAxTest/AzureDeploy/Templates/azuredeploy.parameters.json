@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "ABC"
+            "value": "BDW"
         },
         "Windows Domain name": {
-            "value": "abc.local"
+            "value": "bdw.local"
         },
         "DomainAdminPassword": {
             "value": "Enter123**"
