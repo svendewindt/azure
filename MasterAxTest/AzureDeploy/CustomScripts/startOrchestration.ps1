@@ -7,8 +7,7 @@ param(
     Set-StrictMode -Version 3.0
     #Getting required modules/scripts
     #Get Logging.psm1 in the modules folder
-    #$source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/CustomScripts/Logging.psm1"
-    $source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterAxTest/MasterAxTest/CustomScripts/Logging.psm1"
+    $source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterAxTest/AzureDeploy/CustomScripts/Logging.psm1"
     $destination = "C:\Program Files\WindowsPowerShell\Modules"
     $folderName = "Logging"
     #Create folder in the modules folder
