@@ -105,7 +105,7 @@
     "RDS01Name": "[concat(parameters('Project Name'), 'RDS01')]",
     "RDS01IPAddress": "172.16.1.20",
     "RDSWindowsOSVersion": "2012-R2-Datacenter",
-    "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterAxTest/MasterAxTest",
+    "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterAxTest/AzureDeploy",
     "WMFVersion": "5.0",
     "apiVersion": "2016-01-01",
     "customScriptUrl": "[concat(variables('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
