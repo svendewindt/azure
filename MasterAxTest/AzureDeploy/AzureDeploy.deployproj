@@ -39,6 +39,7 @@
     <None Include="DSC\configureRDS.ps1.zip" />
     <None Include="Templates\createDC.json" />
     <None Include="Templates\createRDS.json" />
+    <None Include="Templates\updateVNetDNS.json" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
 </Project>
