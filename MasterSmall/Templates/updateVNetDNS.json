@@ -20,43 +20,43 @@
         
     },
     "resources": [
-        {
-            "name": "[parameters('VNetName')]",
-            "type": "Microsoft.Network/virtualNetworks",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [ ],
-          "tags": {
-            "displayName": "[parameters('VNetName')]"
+      {
+        "name": "[parameters('VNetName')]",
+        "type": "Microsoft.Network/virtualNetworks",
+        "location": "[parameters('Location')]",
+        "apiVersion": "2015-06-15",
+        "dependsOn": [],
+        "tags": {
+          "displayName": "[parameters('VNetName')]"
+        },
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": [
+              "[parameters('VNetPrefix')]"
+            ]
           },
-          "properties": {
-            "addressSpace": {
-              "addressPrefixes": [
-                "[parameters('VNetPrefix')]"
-              ]
-            },
-            "subnets": [
-              {
-                "name": "[parameters('VNetSubnet1Name')]",
-                "properties": {
-                  "addressPrefix": "[parameters('VNetSubnet1Prefix')]"
-                }
-              },
-              {
-                "name": "[parameters('VNetSubnet2Name')]",
-                "properties": {
-                  "addressPrefix": "[parameters('VNetSubnet2Prefix')]"
-                }
+          "subnets": [
+            {
+              "name": "[parameters('VNetSubnet1Name')]",
+              "properties": {
+                "addressPrefix": "[parameters('VNetSubnet1Prefix')]"
               }
-            ],
-            "dhcpOptions": {
-              "dnsServers": [
-                "[parameters('DNSServer')]"
-              ]
+            },
+            {
+              "name": "[parameters('VNetSubnet2Name')]",
+              "properties": {
+                "addressPrefix": "[parameters('VNetSubnet2Prefix')]"
+              }
             }
+          ],
+          "dhcpOptions": {
+            "dnsServers": [
+              "[parameters('DNSServer')]"
+            ]
           }
-          
         }
+
+      }
     ],
     "outputs": {
     }
