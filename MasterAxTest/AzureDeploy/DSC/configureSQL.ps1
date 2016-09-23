@@ -2,7 +2,8 @@
 {
 
     param(
-        [String]$nodeName = "localhost"
+        [String]$nodeName = "localhost",
+
     )
 
     Import-DscResource -moduleName cdisk, xdisk, PSDesiredStateConfiguration, xComputerManagement, xPendingReboot
@@ -29,13 +30,6 @@
             DriveLetter = 'F'
         }
 
-
-        xComputer JoinDomain
-        {
-            Name = $env:COMPUTERNAME
-            DomainName = $domainName
-            Credential = $domaincreds
-        }
 
         WindowsFeature RDS-RD-Server
         {
