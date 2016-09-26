@@ -199,7 +199,7 @@
           "Password": "[parameters('AdminPassword')]"
         }
       }
-    }
+    },
     {
       "name": "[variables('SQLPIPName')]",
       "type": "Microsoft.Network/publicIPAddresses",

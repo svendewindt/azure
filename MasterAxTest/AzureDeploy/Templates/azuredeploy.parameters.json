@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "MAT"
+            "value": "BAD"
         },
         "Windows Domain name": {
-            "value": "mat.local"
+            "value": "bad.local"
         },
         "DomainAdminPassword": {
             "value": "Enter123**"
