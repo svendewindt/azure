@@ -2,7 +2,9 @@
 {
 
     param(
-        [String]$nodeName = "localhost"
+        [String]$nodeName = "localhost",
+        [Parameter(mandatory)][String]$domainName,
+        [Parameter(mandatory)][System.Management.Automation.PSCredential]$Admincreds
 
     )
 
@@ -17,6 +19,13 @@
         LocalConfigurationManager
         {
             RebootNodeIfNeeded = $true
+        }
+
+        xComputer JoinDomain
+        {
+            Name = $env:COMPUTERNAME
+            DomainName = $domainName
+            Credential = $domaincreds
         }
 
         xWaitforDisk Disk2{

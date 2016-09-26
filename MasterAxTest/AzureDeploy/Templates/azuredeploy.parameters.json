@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "sdw"
+            "value": "MAT"
         },
         "Windows Domain name": {
-            "value": "bdw.local"
+            "value": "mat.local"
         },
         "DomainAdminPassword": {
             "value": "Enter123**"
