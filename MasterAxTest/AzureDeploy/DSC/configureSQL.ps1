@@ -2,7 +2,7 @@
 {
 
     param(
-        [String]$nodeName = "localhost",
+        [String]$nodeName = "localhost"
 
     )
 
