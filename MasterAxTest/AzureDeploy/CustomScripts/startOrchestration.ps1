@@ -7,13 +7,16 @@ param(
     Set-StrictMode -Version 3.0
     #Getting required modules/scripts
     #Get Logging.psm1 in the modules folder
-    $source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterAxTest/AzureDeploy/CustomScripts/Logging.psm1"
+	
+	$SourcePath = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterAxTest/AzureDeploy/CustomScripts/"
+	$LoggingModule = "Logging.psm1"
+	$LogSource = $SourcePath + $LoggingModule
     $destination = "C:\Program Files\WindowsPowerShell\Modules"
     $folderName = "Logging"
     #Create folder in the modules folder
     New-Item -Path $destination -Name $folderName -ItemType directory 2>&1
     #Download the logging module
-    Invoke-WebRequest -Uri $source -OutFile "$($destination)\$($folderName)\Logging.psm1" 2>&1 
+    Invoke-WebRequest -Uri $LogSource -OutFile "$($destination)\$($folderName)\Logging.psm1" 2>&1 
     Import-module Logging.psm1  2>&1
 	#Logging functions can be used now.
 
@@ -75,13 +78,13 @@ param(
     #Get DeployRDS.ps1
 	$scriptName = "DeployRDS.ps1"
 	Write-log -log $log -title "Downloading $($scriptName)"
-    $source = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/CustomScripts/$($scriptName)"
-	Write-log -log $log -line "Source              : $($source)"
+    $sourceRDSScript = "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall/CustomScripts/" + $scriptName
+	Write-log -log $log -line "Source              : $($sourceRDSScript)"
     $destination = $PSScriptRoot
     $deployRDSScript = "$($PSScriptRoot)\$($scriptName)"
 	Write-log -log $log -line "Destination         : $($deployRDSScript)"
 	Write-log -log $log -line "Downloading"
-    Invoke-WebRequest -Uri $source -OutFile "$deployRDSScript"
+    Invoke-WebRequest -Uri $sourceRDSScript -OutFile "$deployRDSScript"
    
 	Write-log -log $log -title "Starting $($scriptName)"
     Invoke-Command -FilePath $deployRDSScript -ComputerName $fqdnRDSBroker -Credential $credential -ArgumentList $fqdnRDSBroker, $fqdnRDSWebAccess, $fqdnRDSHost, $log
