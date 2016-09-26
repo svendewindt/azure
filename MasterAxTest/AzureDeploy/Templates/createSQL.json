@@ -183,7 +183,7 @@
       "name": "[concat(parameters('SQLName'),'/JoinDomain')]",
       "location": "[parameters('Location')]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('SQLName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('SQLName'))]",
       ],
       "properties": {
         "publisher": "Microsoft.Compute",
@@ -199,13 +199,13 @@
           "Password": "[parameters('AdminPassword')]"
         }
       }
-    },
+    }
     {
       "name": "[variables('SQLPIPName')]",
       "type": "Microsoft.Network/publicIPAddresses",
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
-      "dependsOn": [],
+      "dependsOn": [ ],
       "tags": {
         "displayName": "[variables('SQLPIPName')]"
       },
