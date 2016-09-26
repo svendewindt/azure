@@ -184,7 +184,7 @@
       "location": "[parameters('Location')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('SQLName'))]",
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('SQLName'),'/','configureSQL')]"
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('SQLName'),'configureSQL')]"
       ],
       "properties": {
         "publisher": "Microsoft.Compute",
