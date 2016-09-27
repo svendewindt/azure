@@ -70,7 +70,7 @@
         "Standard_DS4"
       ],
       "metadata": {
-        "description": "Size of the SQL server. (Op premium storage)"
+        "description": "Size of the SQL / AOS server. (On premium storage)"
       }
     }
 
