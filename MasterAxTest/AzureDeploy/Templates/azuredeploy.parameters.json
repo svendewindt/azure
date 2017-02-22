@@ -3,13 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "BAD4"
+            "value": "Baca"
         },
         "Windows Domain name": {
-            "value": "bad4.local"
+            "value": "baca.local"
         },
         "DomainAdminPassword": {
-            "value": "Enter123**"
+            "value": "Enter123"
+        },
+        "DomainAdmin": {
+            "value": "adminsvdw"
         }
     }
 }

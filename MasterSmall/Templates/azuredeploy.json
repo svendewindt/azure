@@ -13,8 +13,8 @@
     },
     "Location": {
       "type": "string",
-      "defaultValue": "West Europe",
-      "allowedValues": [ "East China", "East US2", "West Europe", "West Japan", "West US", "Southeast Asia" ],
+      "defaultValue": "North Europe",
+      "allowedValues": [ "East China", "East US2", "North Europe", "West Japan", "West US", "Southeast Asia" ],
       "metadata": {
         "description": "The location to roll out the project. This location must support premium storage."
       }
@@ -35,7 +35,7 @@
     },
     "DomainAdminPassword": {
       "type": "securestring",
-      "minLength": 8,
+      "minLength": 12,
       "metadata": {
         "description": "Password for the domain administrator"
       }
