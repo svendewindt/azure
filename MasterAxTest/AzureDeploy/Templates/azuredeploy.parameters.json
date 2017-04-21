@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "Baca"
+            "value": "Wotas"
         },
         "Windows Domain name": {
-            "value": "baca.local"
+            "value": "wotas.local"
         },
         "DomainAdminPassword": {
-            "value": "Enter123"
+            "value": "EnterEnter123"
         },
         "DomainAdmin": {
             "value": "adminsvdw"

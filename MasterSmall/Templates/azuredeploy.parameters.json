@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "abc"
+            "value": "Wotas2"
         },
         "Windows Domain name": {
-            "value": "abc.local"
+            "value": "wotas.local"
         },
         "DomainAdminPassword": {
-            "value": "EterEnter123"
+            "value": "EnterEnter123"
         },
         "DCSize": {
             "value": "Standard_D1_v2"
@@ -24,7 +24,7 @@
             "value": "Standard_D1_v2"
         },
         "DomainAdmin": {
-            "value": "adminABC"
+            "value": "adminsvdw"
         }
     }
 }
