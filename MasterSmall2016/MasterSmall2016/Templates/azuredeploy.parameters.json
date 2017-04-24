@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "wotas"
+            "value": "bcd"
         },
         "Windows Domain name": {
             "value": "wotas.local"
