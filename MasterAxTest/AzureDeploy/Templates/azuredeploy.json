@@ -35,7 +35,7 @@
     },
     "DomainAdminPassword": {
       "type": "securestring",
-      "minLength": 12,
+      "minLength": 8,
       "metadata": {
         "description": "Password for the domain administrator"
       }
