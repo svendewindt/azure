@@ -1,0 +1,176 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Location": { "type": "string" },
+    "StorageAccountName": { "type": "string" },
+    "VNetName": { "type": "string" },
+    "VNetSubnet1Name": { "type": "string" },
+    "RDSWebAccessAvailabilitySetName": { "type": "string" },
+    "RDSWebAccessSecurityGroupName": { "type": "string"},
+    "RDSWebAccessName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "AdminUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "AdminPassword": { "type": "securestring" },
+    "DomainName": { "type": "string" },
+    "RDSWebAccessWindowsOSVersion": { "type": "string" },
+    "RDSWebAccessSize": { "type": "string" },
+    "RDSWebAccessIPAddress": {
+      "type": "string",
+      "minLength": 4
+    },
+    "AssetLocation": { "type": "string" }
+  },
+  "variables": {
+    "RDSWebAccessImagePublisher": "MicrosoftWindowsServer",
+    "RDSWebAccessImageOffer": "WindowsServer",
+    "RDSWebAccessOSDiskName": "[concat(parameters('RDSWebAccessName'),'OSDisk')]",
+    "RDSWebAccessVmSize": "[parameters('RDSWebAccessSize')]",
+    "RDSWebAccessVnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]",
+    "RDSWebAccessSubnetRef": "[concat(variables('RDSWebAccessVnetID'), '/subnets/', parameters('VNetSubnet1Name'))]",
+    "RDSWebAccessStorageAccountContainerName": "vhds",
+    "RDSWebAccessNicName": "[concat(parameters('RDSWebAccessName'), 'NetworkInterface')]",
+    "RDSWebAccessPIPName": "[concat(parameters('RDSWebAccessName'), 'PublicIP')]",
+    "RDSWebAccessPIPDnsName": "[tolower(parameters('RDSWebAccessName'))]",
+    "installARDSWebAccessonfigurationFunction": "installARDSWebAccessonfiguration.ps1\\Main",
+    "modulesUrl": "[concat(parameters('AssetLocation'),'/DSC/configureRDSWA.ps1.zip')]",
+    "configurationFunction": "configureRDSWA.ps1\\configureRDSWA"
+  },
+  "resources": [
+    {
+      "name": "[parameters('RDSWebAccessAvailabilitySetName')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "location": "[parameters('location')]",
+      "apiVersion": "2015-06-15"
+    },
+    {
+      "name": "[variables('RDSWebAccessNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('RDSWebAccessPIPName'))]"
+      ],
+      "tags": {
+        "displayName": "[variables('RDSWebAccessNicName')]"
+      },
+      "properties": {
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('RDSWebAccessSecurityGroupName'))]"
+        },
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "172.16.1.40",
+              "subnet": {
+                "id": "[variables('RDSWebAccessSubnetRef')]"
+              },
+              "publicIPAddress": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('RDSWebAccessPIPName'))]" }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('RDSWebAccessName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('RDSWebAccessNicName'))]",
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('RDSWebAccessAvailabilitySetName'))]"
+      ],
+      "tags": {
+        "displayName": "WebAccess"
+      },
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('RDSWebAccessAvailabilitySetName'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('RDSWebAccessSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('RDSWebAccessName')]",
+          "adminUsername": "[parameters('AdminUsername')]",
+          "adminPassword": "[parameters('AdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('RDSWebAccessImagePublisher')]",
+            "offer": "[variables('RDSWebAccessImageOffer')]",
+            "sku": "[parameters('RDSWebAccessWindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "[variables('RDSWebAccessOSDiskName')]",
+            "vhd": {
+              "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', variables('RDSWebAccessStorageAccountContainerName'), '/', variables('RDSWebAccessOSDiskName'), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('RDSWebAccessNicName'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+
+      ]
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('RDSWebAccessName'),'/JoinDomain')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('RDSWebAccessName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "JsonADDomainExtension",
+        "typeHandlerVersion": "1.0",
+        "settings": {
+          "Name": "[parameters('DomainName')]",
+          "User": "[concat(parameters('DomainName'), '\\', parameters('AdminUserName'))]",
+          "Restart": "true",
+          "Options": "3"
+        },
+        "protectedsettings": {
+          "Password": "[parameters('AdminPassword')]"
+        }
+      }
+    },
+    {
+      "name": "[variables('RDSWebAccessPIPName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "[variables('RDSWebAccessPIPName')]"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('RDSWebAccessPIPDnsName')]"
+        }
+      }
+    }
+
+  ],
+    "outputs": {
+    }
+}
