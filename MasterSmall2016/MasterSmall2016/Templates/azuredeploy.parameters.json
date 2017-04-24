@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Project Name": {
-            "value": "Wotas2"
+            "value": "wotas"
         },
         "Windows Domain name": {
             "value": "wotas.local"
@@ -12,16 +12,16 @@
             "value": "EnterEnter123"
         },
         "DCSize": {
-            "value": "Standard_D1_v2"
+            "value": "Standard_A2_v2"
         },
         "RDSSize": {
-            "value": "Standard_D1_v2"
+            "value": "Standard_A2_v2"
         },
         "SQLSize": {
             "value": "Standard_DS2"
         },
         "RDSWebAccessSize": {
-            "value": "Standard_D1_v2"
+            "value": "Standard_D2_v2"
         },
         "DomainAdmin": {
             "value": "adminsvdw"

@@ -135,7 +135,7 @@
     "RDSWebAccess01Name": "[concat(parameters('Project Name'), 'RDSWA01')]",
     "RDSWebAccess01IPAddress": "172.16.1.40",
     "RDSWebAccessWindowsOSVersion": "2016-Datacenter",
-    "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall2016",
+    "AssetLocation": "https://raw.githubusercontent.com/svendewindt/azure/master/MasterSmall2016/MasterSmall2016/",
     "WMFVersion": "5.0",
     "customScriptUrl": "[concat(variables('AssetLocation'),'/CustomScripts/startOrchestration.ps1')]",
     "customScriptName": "startOrchestration.ps1",
