@@ -14,7 +14,7 @@
     "Location": {
       "type": "string",
       "defaultValue": "North Europe",
-      "allowedValues": [ "East China", "East US2", "North Europe", "West Japan", "West US", "Southeast Asia" ],
+      "allowedValues": [ "East China", "East US2", "North Europe", "West Japan", "North Central US", "West US", "Southeast Asia" ],
       "metadata": {
         "description": "The location to roll out the project. This location must support premium storage."
       }
