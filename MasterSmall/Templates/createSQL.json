@@ -33,7 +33,7 @@
   },
   "variables": {
     "SQLImagePublisher": "MicrosoftSQLServer",
-    "SQLImageOffer": "SQL2014SP1-WS2012R2",
+    "SQLImageOffer": "SQL2014SP3-WS2012R2",
     "SQLOSDiskName": "[concat(parameters('SQLName'),'OSDisk')]",
     "SQLDataDiskName": "[concat(parameters('SQLName'),'DataDisk')]",
     "SQLLogDiskName": "[concat(parameters('SQLName'),'LogDisk')]",
